@@ -1,0 +1,67 @@
+#ifndef RES_PAGES
+#define RES_PAGES
+
+#include <string>
+#include <vector>
+
+enum menu_id {
+    NONE,
+    START,
+    M_PRINT,
+    M_SAVE,
+    M_IMPORT,
+    M_ADD_PIPE,
+    M_ADD_CS
+};
+
+struct Button {
+    std::string data;
+    menu_id next;
+};
+
+struct Page {
+    menu_id id;
+    std::string title;
+    std::vector<Button> btn;
+};
+
+struct Book {
+    std::vector<Page> pages;
+};
+
+static const Book book = {
+    .pages = {
+        Page{
+            .id = START,
+            .title = " Karchenko L1 ",
+            .btn = {
+                Button {
+                    .data = "Exit",
+                    .next = NONE
+                },
+                Button {
+                    .data = "Print",
+                    .next = M_PRINT
+                },
+                Button {
+                    .data = "Save",
+                    .next = M_SAVE
+                },
+                Button {
+                    .data = "Import",
+                    .next = M_IMPORT
+                },
+                Button {
+                    .data = "Add Pipe",
+                    .next = M_ADD_PIPE
+                },
+                Button {
+                    .data = "Add Station",
+                    .next = M_ADD_CS
+                }
+            }
+        }
+    }
+};
+
+#endif // RES_PAGES
