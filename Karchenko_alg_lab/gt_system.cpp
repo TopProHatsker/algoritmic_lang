@@ -65,7 +65,6 @@ int System::importFromFile(ifstream& ifs) {
     for (size_t i = 0; i < st_num; i++) {
         Station t;
         if (ifs >> t) {
-            //cerr << "ST" << endl;
             stations.push_back(t);
         } else {
             cerr << ">! Error reading stations!" << endl;
@@ -77,7 +76,6 @@ int System::importFromFile(ifstream& ifs) {
     for (size_t i = 0; i < pp_num; i++) {
         Pipe t;
         if (ifs >> t) {
-            //cerr << "PP" << endl;
             pipes.push_back(t);
         } else {
             cerr << ">! Error reading pipes!" << endl;

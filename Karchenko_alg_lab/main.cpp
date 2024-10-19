@@ -41,6 +41,21 @@ int main() {
             addPipe(gt_sys);
             break;
 
+        case M_ADD_CS:
+            cout << "\n - - - - - | Add station | - - - - -\n" << endl;
+            addStation(gt_sys);
+            break;
+
+        case M_EDIT_PIPE:
+            cout << "\n - - - - - | Edit pipe | - - - - -\n" << endl;
+            editPipe(gt_sys);
+            break;
+
+        case M_EDIT_CS:
+            cout << "\n - - - - - | Edit station | - - - - -\n" << endl;
+            editStation(gt_sys);
+            break;
+
         default:
             break;
         }

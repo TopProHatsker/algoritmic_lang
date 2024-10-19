@@ -23,6 +23,21 @@ public:
         this->on_repair = on_repair;
     }
 
+    bool isRepair() {
+        return on_repair;
+    }
+
+    void setRepairStatus(bool on_repair) {
+        this->on_repair = on_repair;
+    }
+
+    void print() {
+        cout << " Name: " << name
+             << "\tDiameter: " << diameter
+             << "\tLength: " << length
+             << "\tOn repair: " << on_repair << endl;
+    }
+
     friend istream&  operator >> (istream&   in, Pipe& new_pipe);
     friend ostream&  operator << (ostream&  out, Pipe& new_pipe);
     friend ofstream& operator << (ofstream& ofs, Pipe& new_pipe);

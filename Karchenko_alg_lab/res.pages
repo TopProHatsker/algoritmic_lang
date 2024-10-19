@@ -11,7 +11,9 @@ enum menu_id {
     M_SAVE,
     M_IMPORT,
     M_ADD_PIPE,
-    M_ADD_CS
+    M_ADD_CS,
+    M_EDIT_PIPE,
+    M_EDIT_CS
 };
 
 struct Button {
@@ -58,6 +60,14 @@ static const Book book = {
                 Button {
                     .data = "Add Station",
                     .next = M_ADD_CS
+                },
+                Button {
+                    .data = "Edit Pipe",
+                    .next = M_EDIT_PIPE
+                },
+                Button {
+                    .data = "Edit Station",
+                    .next = M_EDIT_CS
                 }
             }
         }

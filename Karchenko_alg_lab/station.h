@@ -24,6 +24,25 @@ public:
         this->eff = eff;
     }
 
+    uint getTotalWS() {
+        return this->workshops_num;
+    }
+
+    bool setWorkWS(uint num) {
+        if (num > this->workshops_num)
+            return 1;
+
+        this->workshops_work = num;
+        return 0;
+    }
+
+    void print() {
+        cout << " Name: " << name
+             << "\tTotal WS num: " << workshops_num
+             << "\tWork WS num: " << workshops_work
+             << "\tEfficiency: " << eff << endl;
+    }
+
     friend istream&  operator >> (istream&   in, Station& station);
     friend ostream&  operator << (ostream&  out, Station& station);
     friend ofstream& operator << (ofstream& ofs, Station& station);

@@ -1,6 +1,38 @@
 #include "station.h"
 
-istream&  operator >> (istream& in, Station& station) {}
+
+template <typename T>
+T check_input(T min, T max)
+{
+    T x;
+    while ((cin >> x).fail() || (cin).peek() != '\n' || x < min || x > max)
+    {
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cout << "\n!> Enter the correct data (" << min << " - " << max << ") ";
+    }
+    return x;
+}
+
+
+
+istream&  operator >> (istream& in, Station& station) {
+    cout << "Name: ";
+    cin >> station.name;
+
+    cout << "Total workshops num: ";
+    station.workshops_num = check_input(0, 999);
+
+    cout << "Worked num: ";
+    station.workshops_work = check_input(0, (int)station.workshops_num);
+
+    cout << "Efficiency: ";
+    station.eff = check_input(0., 999.9);
+
+    return in;
+}
+
+
 ostream&  operator << (ostream& out, Station& station) {
     out << station.name << '\t';
     out << station.workshops_num << '\t';

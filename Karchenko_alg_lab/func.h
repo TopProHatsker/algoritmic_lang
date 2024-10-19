@@ -18,13 +18,12 @@ T check_input(T min, T max);
 
 void waitEnter();
 
-
 void save(System& gt_sys);
-
 void load(System& gt_sys);
-
 void addPipe(System& gt_sys);
-
+void addStation(System& gt_sys);
+void editPipe(System& gt_sys);
+void editStation(System& gt_sys);
 
 
 #endif // FUNC_H
