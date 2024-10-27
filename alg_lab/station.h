@@ -61,6 +61,10 @@ public:
     friend ofstream& operator << (ofstream& ofs, Station& station);
     friend ifstream& operator >> (ifstream& ifs, Station& station);
 
+
+    uint getId() {
+        return this->ID;
+    }
 };
 
 #endif // STATION_H

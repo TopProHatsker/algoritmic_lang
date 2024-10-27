@@ -4,27 +4,31 @@
 
 
 
-void System::print(ostream& out){
+void GTSystem::print(ostream& out){
 
     out << "Stations:\n";
     if (stations.empty())
         out << " Empty" << endl;
     else {
-        out << " ID\tName\tTotal\tWork WS\tEfficiency" << endl;
-        print_vector(out, stations);
+        //out << " ID\t"; out << "Name "; out << "Total\tWork WS\tEfficiency" << endl;
+        printf("  ID|          Name| Total|  Work|Efficiency\n");
+        printf("----+--------------+------+------+----------\n");
+        print_arr(out, stations);
     }
     out << "\nPipes:\n";
     if (pipes.empty())
         out << " Empty" << endl;
     else {
-        out << " ID\tName\tDiam\tLength\tOnRepair" << endl;
-        print_vector(out, pipes);
+        //out << " ID\t"; out << "Name "; out << "Diam\tLength\tOnRepair" << endl;
+        printf("  ID|          Name|  Diam|Length|OnRepair\n");
+        printf("----+--------------+------+------+---------\n");
+        print_arr(out, pipes);
     }
 
 }
 
 
-int System::saveToFile(ofstream& ofs) {
+int GTSystem::saveToFile(ofstream& ofs) {
     if (!ofs.is_open())
         return 1;
 
@@ -34,21 +38,20 @@ int System::saveToFile(ofstream& ofs) {
         << '\n';
 
     for (auto& t: this->stations)
-        ofs << t;
+        ofs << t.second;
 
     for (auto& t: this->pipes)
-        ofs << t;
+        ofs << t.second;
 
     return 0;
 }
 
 
-int System::importFromFile(ifstream& ifs) {
+int GTSystem::importFromFile(ifstream& ifs) {
     if (!ifs.is_open())
         return 1;
 
-    this->stations.clear();
-    this->pipes.clear();
+    this->clear();
 
     size_t st_num, pp_num;
     ifs >> st_num >> pp_num;
@@ -56,9 +59,9 @@ int System::importFromFile(ifstream& ifs) {
     for (size_t i = 0; i < st_num; i++) {
         Station t;
         if (ifs >> t) {
-            stations.push_back(t);
+            stations.insert({t.getId(), t});
         } else {
-            cerr << ">! Error reading stations!" << endl;
+            cerr << "!> Error reading stations!" << endl;
             stations.clear();
             return 1;
         }
@@ -67,9 +70,9 @@ int System::importFromFile(ifstream& ifs) {
     for (size_t i = 0; i < pp_num; i++) {
         Pipe t;
         if (ifs >> t) {
-            pipes.push_back(t);
+            pipes.insert({t.getId(), t});
         } else {
-            cerr << ">! Error reading pipes!" << endl;
+            cerr << "!> Error reading pipes!" << endl;
             pipes.clear();
             return 2;
         }

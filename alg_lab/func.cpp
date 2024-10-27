@@ -9,16 +9,17 @@ void waitEnter() {
 }
 
 
-void save(System& gt_sys) {
+void save(GTSystem& gt_sys) {
     cout << "Enter filename to save: ";
     string fname;
-    cin >> fname; // TODO: getline
+    getline(cin, fname);
+    //cin >> fname;
 
     ofstream ofs;
 
     ofs.open(fname);
     if (!ofs.is_open()) {
-        cout << "> Error openning!" << endl;
+        cout << "!> Error openning!" << endl;
         cin.ignore();
         return;
     }
@@ -26,37 +27,43 @@ void save(System& gt_sys) {
     ofs.close();
 
     if (res) {
-        cout << "> Error while saving!" << endl;
+        cout << "!> Error while saving!" << endl;
     } else {
         cout << "> Saved successfully" << endl;
     }
 
-    cin.ignore();
+    //cin.ignore();
 }
 
 
-void load(System& gt_sys) {
+void load(GTSystem& gt_sys) {
     cout << "Enter filename: ";
     string fname;
-    cin >> fname;
+    //cin >> fname;
+    getline(cin, fname);
 
-    ifstream ifs; // TODO: getline
+    ifstream ifs;
 
     ifs.open(fname);
+    if (!ifs.is_open()) {
+        cout << "!> Error openning!" << endl;
+        cin.ignore();
+        return;
+    }
     int res = gt_sys.importFromFile(ifs);
     ifs.close();
 
     if (res) {
-        cout << "> Error while reading!" << endl;
+        cout << "!> Error while reading!" << endl;
     } else {
         cout << "> Loaded successfully" << endl;
     }
 
-    cin.ignore();
+    //cin.ignore();
 }
 
 
-void addPipe(System& gt_sys) {
+void addPipe(GTSystem& gt_sys) {
     Pipe p;
     cin >> p;
     gt_sys.add(p);
@@ -64,22 +71,22 @@ void addPipe(System& gt_sys) {
 }
 
 
-void addStation(System& gt_sys) {
+void addStation(GTSystem& gt_sys) {
     Station s;
     cin >> s;
     gt_sys.add(s);
     cin.ignore();
 }
 
-
-void editPipe(System& gt_sys) {
+/*
+void editPipe(GTSystem& gt_sys) {
     cout << "Pipes:" << endl;
     auto pipes = gt_sys.getPipes();
     print_vector(cout, pipes);
 
     if (!pipes.size())
         return;
-/*
+
     cout << "Enter num to edit: ";
     uint num = check_input(1, (int)pipes.size());
     num--;
@@ -97,12 +104,13 @@ void editPipe(System& gt_sys) {
 
     cout << "\nNew pipe: " << endl;
     pipe->print();
-*/
+
     cin.ignore();
 }
+*/
 
-
-void editStation(System& gt_sys) {
+/*
+void editStation(GTSystem& gt_sys) {
     cout << "Stations:" << endl;
     auto stations = gt_sys.getStations();
     print_vector(cout, *stations);
@@ -126,3 +134,4 @@ void editStation(System& gt_sys) {
 
     cin.ignore();
 }
+*/

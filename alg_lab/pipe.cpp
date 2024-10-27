@@ -5,7 +5,8 @@ uint Pipe::PP_MaxID = 0;
 
 istream&  operator >> (istream& in, Pipe& pipe) {
     cout << "Name: ";
-    cin >> pipe.name;
+    getline(in, pipe.name);
+    //cin >> pipe.name;
 
     cout << "Length: ";
     pipe.length = check_input(0, 999);
@@ -20,19 +21,31 @@ istream&  operator >> (istream& in, Pipe& pipe) {
 }
 
 
+// ostream&  operator << (ostream& out, Pipe& pipe) {
+//     out << pipe.ID        << '\t';
+//     out << pipe.name   << '\t';
+//     out << pipe.diameter  << '\t';
+//     out << pipe.length    << '\t';
+//     out << pipe.on_repair << '\t';
+
+//     return out;
+// }
+
 ostream&  operator << (ostream& out, Pipe& pipe) {
-    out << pipe.ID      << '\t';
-    out << pipe.name      << '\t';
-    out << pipe.diameter  << '\t';
-    out << pipe.length    << '\t';
-    out << pipe.on_repair << '\t';
+    printf("%3d| %13s| %5.lf| %5.lf| %7.d",
+           pipe.ID,
+           pipe.name.c_str(),
+           pipe.diameter,
+           pipe.length,
+           pipe.on_repair
+    );
 
     return out;
 }
 
 
 ofstream& operator << (ofstream& ofs, Pipe& pipe) {
-    ofs << pipe.ID      << '\n';
+    //ofs << pipe.ID      << '\n';
     ofs << pipe.name      << '\n';
     ofs << pipe.diameter  << '\n';
     ofs << pipe.length    << '\n';
@@ -43,8 +56,10 @@ ofstream& operator << (ofstream& ofs, Pipe& pipe) {
 
 
 ifstream& operator >> (ifstream& ifs, Pipe& pipe) {
-    ifs >> pipe.ID;
-    ifs >> pipe.name;
+    //ifs >> pipe.ID;
+    ifs.ignore();   // Ignore '\n' after numbers row
+    getline(ifs, pipe.name);
+    //ifs >> pipe.name;
     ifs >> pipe.diameter;
     ifs >> pipe.length;
     ifs >> pipe.on_repair;

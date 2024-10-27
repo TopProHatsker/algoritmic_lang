@@ -56,6 +56,10 @@ public:
     friend ofstream& operator << (ofstream& ofs, Pipe& new_pipe);
     friend ifstream& operator >> (ifstream& ifs, Pipe& new_pipe);
 
+    uint getId() {
+        return this->ID;
+    }
+
 };
 
 

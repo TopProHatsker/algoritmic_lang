@@ -6,11 +6,11 @@
 using namespace std;
 
 /*
- * TODO:
- * [ ] getline
- * [ ] unordered map
- * [ ] edit pipe
- * [ ] ID
+ * _TODO:
+ * [ ] edit
+ * [ ] delete
+ * [ ] filer find
+ * [ ] package changing
  */
 
 
@@ -19,7 +19,7 @@ int main() {
     NewMenu menu;
     menu.auto_size();
 
-    System gt_sys;
+    GTSystem gt_sys;
 
     menu_id next = START;
 
@@ -56,12 +56,12 @@ int main() {
 
         case M_EDIT_PIPE:
             cout << "\n - - - - - | Edit pipe | - - - - -\n" << endl;
-            editPipe(gt_sys);
+            //editPipe(gt_sys); // TODO: in gt_system method
             break;
 
         case M_EDIT_CS:
             cout << "\n - - - - - | Edit station | - - - - -\n" << endl;
-            editStation(gt_sys);
+            //editStation(gt_sys); // TODO: method
             break;
 
         default:

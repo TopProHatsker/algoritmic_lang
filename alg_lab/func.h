@@ -2,7 +2,8 @@
 #define FUNC_H
 
 #include <iostream>
-#include <vector>
+#include <iomanip>
+#include "cstdio"
 #include "gt_system.h"
 
 using namespace std;
@@ -23,9 +24,9 @@ T check_input(T min, T max)
 
 
 template <typename T>
-void print_vector(ostream& out, vector<T> arr) {
-    for (int i = 0; i < arr.size(); i++) {
-        out << " " << arr[i] << '\n';
+void print_arr(ostream& out, unordered_map<uint, T> arr) {
+    for (auto& t : arr) {
+        out << " " << t.second << '\n';
     }
     out << endl;
 }
@@ -33,12 +34,12 @@ void print_vector(ostream& out, vector<T> arr) {
 
 void waitEnter();
 
-void save(System& gt_sys);
-void load(System& gt_sys);
-void addPipe(System& gt_sys);
-void addStation(System& gt_sys);
-void editPipe(System& gt_sys);
-void editStation(System& gt_sys);
+void save(GTSystem& gt_sys);
+void load(GTSystem& gt_sys);
+void addPipe(GTSystem& gt_sys);
+void addStation(GTSystem& gt_sys);
+//void editPipe(GTSystem& gt_sys);
+//void editStation(GTSystem& gt_sys);
 
 
 #endif // FUNC_H

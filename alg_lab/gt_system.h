@@ -5,20 +5,25 @@
 #include "station.h"
 #include <fstream>
 #include <iostream>
-#include <vector>
+#include <unordered_map>
 
 
-class System {
+class GTSystem {
 
     string name;
-    vector<Pipe> pipes;
-    vector<Station> stations;
+    unordered_map<uint, Pipe> pipes;
+    unordered_map<uint, Station> stations;
 
 public:
 
-    System(string name = "") {
+    GTSystem(string name = "") {
         this->name = name;
     };
+
+    void clear() {
+        this->stations.clear();
+        this->pipes.clear();
+    }
 
     void print(ostream& out);
     int saveToFile(ofstream& ofs);
@@ -33,19 +38,19 @@ public:
     }
 
     void add(Pipe p) {
-        pipes.push_back(p);
+        pipes.insert({p.getId(), p});
     }
     void add(Station s) {
-        stations.push_back(s);
+        stations.insert({s.getId(), s});
     }
 
-    vector<Pipe>& getPipes() {
-        return this->pipes;
-    }
+    // vector<Pipe>& getPipes() {
+    //     return this->pipes;
+    // }
 
-    vector<Station>* getStations() {
-        return &this->stations;
-    }
+    // vector<Station>* getStations() {
+    //     return &this->stations;
+    // }
 
     void editPipe() {
 
