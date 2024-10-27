@@ -1,18 +1,7 @@
 #include "pipe.h"
 #include "func.h"
 
-template <typename T>
-T check_input(T min, T max)
-{
-    T x;
-    while ((cin >> x).fail() || (cin).peek() != '\n' || x < min || x > max)
-    {
-        cin.clear();
-        cin.ignore(10000, '\n');
-        cout << "\n!> Enter the correct data (" << min << " - " << max << ") ";
-    }
-    return x;
-}
+uint Pipe::PP_MaxID = 0;
 
 istream&  operator >> (istream& in, Pipe& pipe) {
     cout << "Name: ";
@@ -32,6 +21,7 @@ istream&  operator >> (istream& in, Pipe& pipe) {
 
 
 ostream&  operator << (ostream& out, Pipe& pipe) {
+    out << pipe.ID      << '\t';
     out << pipe.name      << '\t';
     out << pipe.diameter  << '\t';
     out << pipe.length    << '\t';
@@ -42,6 +32,7 @@ ostream&  operator << (ostream& out, Pipe& pipe) {
 
 
 ofstream& operator << (ofstream& ofs, Pipe& pipe) {
+    ofs << pipe.ID      << '\n';
     ofs << pipe.name      << '\n';
     ofs << pipe.diameter  << '\n';
     ofs << pipe.length    << '\n';
@@ -52,6 +43,7 @@ ofstream& operator << (ofstream& ofs, Pipe& pipe) {
 
 
 ifstream& operator >> (ifstream& ifs, Pipe& pipe) {
+    ifs >> pipe.ID;
     ifs >> pipe.name;
     ifs >> pipe.diameter;
     ifs >> pipe.length;

@@ -3,15 +3,6 @@
 #include "func.h"
 
 
-template <typename T>
-void print_vector(ostream& out, vector<T> arr) {
-    for (int i = 0; i < arr.size(); i++) {
-        out << " " << i + 1 << ") " << arr[i] << '\n';
-    }
-    out << endl;
-}
-
-
 
 void System::print(ostream& out){
 
@@ -19,14 +10,14 @@ void System::print(ostream& out){
     if (stations.empty())
         out << " Empty" << endl;
     else {
-        out << "    Name\tTotal\tWork WS\tEfficiency" << endl;
+        out << " ID\tName\tTotal\tWork WS\tEfficiency" << endl;
         print_vector(out, stations);
     }
     out << "\nPipes:\n";
     if (pipes.empty())
         out << " Empty" << endl;
     else {
-        out << "    Name\tDiam\tLength\tOnRepair" << endl;
+        out << " ID\tName\tDiam\tLength\tOnRepair" << endl;
         print_vector(out, pipes);
     }
 

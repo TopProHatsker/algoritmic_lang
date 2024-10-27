@@ -1,19 +1,8 @@
 #include "station.h"
+#include "func.h"
 
 
-template <typename T>
-T check_input(T min, T max)
-{
-    T x;
-    while ((cin >> x).fail() || (cin).peek() != '\n' || x < min || x > max)
-    {
-        cin.clear();
-        cin.ignore(10000, '\n');
-        cout << "\n!> Enter the correct data (" << min << " - " << max << ") ";
-    }
-    return x;
-}
-
+uint Station::ST_MaxID = 0;
 
 
 istream&  operator >> (istream& in, Station& station) {
@@ -34,6 +23,7 @@ istream&  operator >> (istream& in, Station& station) {
 
 
 ostream&  operator << (ostream& out, Station& station) {
+    out << station.ID << '\t';
     out << station.name << '\t';
     out << station.workshops_num << '\t';
     out << station.workshops_work << '\t';
@@ -44,6 +34,7 @@ ostream&  operator << (ostream& out, Station& station) {
 
 
 ofstream& operator << (ofstream& ofs, Station& station) {
+    ofs << station.ID << '\n';
     ofs << station.name << '\n';
     ofs << station.workshops_num << '\n';
     ofs << station.workshops_work << '\n';
@@ -54,6 +45,7 @@ ofstream& operator << (ofstream& ofs, Station& station) {
 
 
 ifstream& operator >> (ifstream& ifs, Station& station) {
+    ifs >> station.ID;
     ifs >> station.name;
     ifs >> station.workshops_num;
     ifs >> station.workshops_work;

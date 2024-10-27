@@ -3,6 +3,6 @@ Algorithmic languages homework
 
 Progress:
 1) *
-2)
+2) *
 3)
 4)

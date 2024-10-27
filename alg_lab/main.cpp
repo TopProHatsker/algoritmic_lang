@@ -5,6 +5,14 @@
 
 using namespace std;
 
+/*
+ * TODO:
+ * [ ] getline
+ * [ ] unordered map
+ * [ ] edit pipe
+ * [ ] ID
+ */
+
 
 int main() {
 

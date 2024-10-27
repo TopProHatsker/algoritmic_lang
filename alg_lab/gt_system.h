@@ -39,12 +39,16 @@ public:
         stations.push_back(s);
     }
 
-    vector<Pipe>* getPipes() {
-        return &this->pipes;
+    vector<Pipe>& getPipes() {
+        return this->pipes;
     }
 
     vector<Station>* getStations() {
         return &this->stations;
+    }
+
+    void editPipe() {
+
     }
 
 };

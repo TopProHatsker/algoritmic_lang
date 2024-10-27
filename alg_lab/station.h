@@ -9,6 +9,9 @@ using namespace std;
 
 class Station {
 
+    static uint ST_MaxID;
+
+    uint ID = 0;
     string name = "";
     uint workshops_num = 0;
     uint workshops_work = 0;
@@ -16,8 +19,17 @@ class Station {
 
 public:
 
-    Station() {};
-    Station(string name, uint workshops_num, uint workshops_work, double eff) {
+    Station() {
+        this->ID = ST_MaxID++;
+    };
+
+    Station(
+        string name,
+        uint workshops_num,
+        uint workshops_work,
+        double eff
+    ) : Station() {
+
         this->name = name;
         this->workshops_num = workshops_num;
         this->workshops_work = workshops_work;
@@ -37,7 +49,8 @@ public:
     }
 
     void print() {
-        cout << " Name: " << name
+        cout << " UID: " << ID
+             << "\tName: " << name
              << "\tTotal WS num: " << workshops_num
              << "\tWork WS num: " << workshops_work
              << "\tEfficiency: " << eff << endl;

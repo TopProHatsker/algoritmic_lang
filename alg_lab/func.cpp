@@ -3,55 +3,25 @@
 #include <limits>
 
 
-template <typename T>
-T check_input(T min, T max)
-{
-    T x;
-    while ((cin >> x).fail() || (cin).peek() != '\n' || x < min || x > max)
-    {
-        cin.clear();
-        cin.ignore(10000, '\n');
-        cout << "\n!> Enter the correct data (" << min << " - " << max << ") ";
-    }
-    return x;
-}
-
-
-template <typename T>
-void print_vector(ostream& out, vector<T> arr) {
-    for (int i = 0; i < arr.size(); i++) {
-        out << " " << i + 1 << ") " << arr[i] << '\n';
-    }
-    out << endl;
-}
-
-
-
-// template <typename T>
-// void print_vector(ostream& out, vector<T> arr) {
-//     for (int i = 0; i < arr.size(); i++) {
-//         out << " " << i << ") " << arr[i] << '\n';
-//     }
-//     out << endl;
-// }
-
-
 void waitEnter() {
     cout << "\n < Press Enter to continue >" << endl;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
 
-
-
 void save(System& gt_sys) {
     cout << "Enter filename to save: ";
     string fname;
-    cin >> fname;
+    cin >> fname; // TODO: getline
 
     ofstream ofs;
 
     ofs.open(fname);
+    if (!ofs.is_open()) {
+        cout << "> Error openning!" << endl;
+        cin.ignore();
+        return;
+    }
     int res = gt_sys.saveToFile(ofs);
     ofs.close();
 
@@ -70,7 +40,7 @@ void load(System& gt_sys) {
     string fname;
     cin >> fname;
 
-    ifstream ifs;
+    ifstream ifs; // TODO: getline
 
     ifs.open(fname);
     int res = gt_sys.importFromFile(ifs);
@@ -105,16 +75,20 @@ void addStation(System& gt_sys) {
 void editPipe(System& gt_sys) {
     cout << "Pipes:" << endl;
     auto pipes = gt_sys.getPipes();
-    print_vector(cout, *pipes);
+    print_vector(cout, pipes);
 
-    if (!pipes->size())
+    if (!pipes.size())
         return;
-
+/*
     cout << "Enter num to edit: ";
-    uint num = check_input(1, (int)pipes->size());
+    uint num = check_input(1, (int)pipes.size());
     num--;
-
-    Pipe* pipe = &(*pipes)[num];
+    //gts.editPipe(num, state);
+    //Pipe* pipe = &(*pipes)[num];
+    pipes[num].setRepairStatus(true);
+    pipes[num].print();
+    Pipe& yaPipe = &(*pipes->begin()) + sizeof(Pipe)*num;
+    yaPipe->print();
     pipe->print();
 
     cout << "\nEnter new repair status (1 - on repair | 0 - not): ";
@@ -123,7 +97,7 @@ void editPipe(System& gt_sys) {
 
     cout << "\nNew pipe: " << endl;
     pipe->print();
-
+*/
     cin.ignore();
 }
 

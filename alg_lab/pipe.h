@@ -8,6 +8,9 @@ using namespace std;
 
 class Pipe {
 
+    static uint PP_MaxID;
+
+    uint ID = 0;
     string name = "";
     double length = 0;
     double diameter = 0;
@@ -15,8 +18,17 @@ class Pipe {
 
 public:
 
-    Pipe() {};
-    Pipe(string name, double length, double diameter, bool on_repair) {
+    Pipe() {
+        this->ID = PP_MaxID++;
+    };
+
+    Pipe(
+        string name,
+        double length,
+        double diameter,
+        bool on_repair
+    ) : Pipe() {
+
         this->name = name;
         this->diameter = diameter;
         this->length = length;
@@ -32,7 +44,8 @@ public:
     }
 
     void print() {
-        cout << " Name: " << name
+        cout << " ID: " << ID
+             << "\tName: " << name
              << "\tDiameter: " << diameter
              << "\tLength: " << length
              << "\tOn repair: " << on_repair << endl;
