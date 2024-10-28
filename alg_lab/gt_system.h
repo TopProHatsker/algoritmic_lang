@@ -44,9 +44,9 @@ public:
         stations.insert({s.getId(), s});
     }
 
-    // vector<Pipe>& getPipes() {
-    //     return this->pipes;
-    // }
+    unordered_map<uint, Pipe> getPipes() {
+        return this->pipes;
+    }
 
     // vector<Station>* getStations() {
     //     return &this->stations;

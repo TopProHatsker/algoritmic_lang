@@ -13,7 +13,8 @@ enum menu_id {
     M_ADD_PIPE,
     M_ADD_CS,
     M_EDIT_PIPE,
-    M_EDIT_CS
+    M_EDIT_CS,
+    M_FILTER_FIND
 };
 
 struct Button {
@@ -44,6 +45,10 @@ static const Book book = {
                 Button {
                     .data = "Print",
                     .next = M_PRINT
+                },
+                Button {
+                    .data = "Fiter find",
+                    .next = M_FILTER_FIND
                 },
                 Button {
                     .data = "Save",

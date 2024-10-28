@@ -34,6 +34,11 @@ int main() {
             gt_sys.print(cout);
             break;
 
+        case M_FILTER_FIND:
+            cout << "\n - - - - - | Filter Find | - - - - -\n" << endl;
+            filterFind(gt_sys);
+            break;
+
         case M_SAVE:
             cout << "\n - - - - - | Save Data | - - - - -\n" << endl;
             save(gt_sys);

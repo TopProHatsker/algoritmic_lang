@@ -1,5 +1,5 @@
 #include "func.h"
-
+#include <vector>
 #include <limits>
 
 
@@ -135,3 +135,32 @@ void editStation(GTSystem& gt_sys) {
     cin.ignore();
 }
 */
+template<typename T>
+using Filter = bool(*)(const Pipe & p, T param);
+
+bool CheckOnRepair(const Pipe& p, bool on_repair) {
+    return p.isRepair() == on_repair;
+}
+
+
+void filterFind(GTSystem& gt_sys) {
+    cout << "> Select type (Station - 1, Pipe - 2): ";
+    int res1 = check_input(1, 2);
+
+    bool (*filter) (const Pipe&, T );
+
+    if (res1 == 1){    // Station
+        cerr << "TODO:"; // TODO:
+    } else {            // Pipe
+        cout << "> Select filter (by Name - 1, OnRepair - 2): ";
+        int res = check_input(1, 2);
+
+        if (res == 1){
+            cerr << "TODO:"; // TODO:
+        } else {
+            filter = CheckOnRepair;
+        }
+    }
+
+    cin.ignore();
+}

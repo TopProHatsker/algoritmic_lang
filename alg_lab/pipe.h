@@ -35,7 +35,7 @@ public:
         this->on_repair = on_repair;
     }
 
-    bool isRepair() {
+    bool isRepair() const {
         return on_repair;
     }
 
@@ -43,7 +43,7 @@ public:
         this->on_repair = on_repair;
     }
 
-    void print() {
+    void print() const {
         cout << " ID: " << ID
              << "\tName: " << name
              << "\tDiameter: " << diameter
@@ -56,7 +56,7 @@ public:
     friend ofstream& operator << (ofstream& ofs, Pipe& new_pipe);
     friend ifstream& operator >> (ifstream& ifs, Pipe& new_pipe);
 
-    uint getId() {
+    uint getId() const {
         return this->ID;
     }
 
