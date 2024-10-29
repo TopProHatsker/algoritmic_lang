@@ -7,9 +7,9 @@ using namespace std;
 
 /*
  * _TODO:
- * [ ] edit
+ * [X] edit
  * [ ] delete
- * [ ] filer find
+ * [X] filer find
  * [ ] package changing
  */
 
@@ -61,12 +61,12 @@ int main() {
 
         case M_EDIT_PIPE:
             cout << "\n - - - - - | Edit pipe | - - - - -\n" << endl;
-            //editPipe(gt_sys); // TODO: in gt_system method
+            editPipe(gt_sys);
             break;
 
         case M_EDIT_CS:
             cout << "\n - - - - - | Edit station | - - - - -\n" << endl;
-            //editStation(gt_sys); // TODO: method
+            //editStation(gt_sys); // TODO:
             break;
 
         default:

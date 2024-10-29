@@ -1,4 +1,5 @@
 #include "func.h"
+#include <cstdint>
 #include <vector>
 #include <limits>
 
@@ -135,31 +136,151 @@ void editStation(GTSystem& gt_sys) {
     cin.ignore();
 }
 */
-template<typename T>
-using Filter = bool(*)(const Pipe & p, T param);
+//template<typename T>
+//using Filter = bool(*)(const Pipe & p, T param);
+bool CheckPPName(const Pipe& p, const void * name) {
+    return p.getName() == *(string*)name;
+}
 
-bool CheckOnRepair(const Pipe& p, bool on_repair) {
-    return p.isRepair() == on_repair;
+bool CheckOnRepair(const Pipe& p, const void * on_repair) {
+    return p.isRepair() == *(bool*)on_repair;
+}
+
+bool CheckSTName(const Station& s, const void * name) {
+    return s.getName() == *(string*)name;
+}
+
+bool CheckPercent(const Station& s, const void * perc) {
+    return s.getUnUsagePerc() >= *(float*)perc;
+}
+
+vector<uint> selectStations(GTSystem& gt_sys) {
+    cout <<
+        "> Select filter "
+        "(by Name - 1, The % of unused WS - 2): ";
+    int res_filt = check_input(1, 2);
+
+    auto filter = CheckPercent;
+    void * param;
+    string name;
+    float perc;
+
+    if (res_filt == 1) {
+        cout << "Enter name: ";
+        cin.ignore();
+        getline(cin, name);
+        param = &name;
+        filter = CheckSTName;
+    } else {
+        cout << "Enter perc: ";
+        cin >> perc;
+        cin.ignore();
+        param = &perc;
+    }
+
+    cout << endl;
+    ST_HEADER
+
+    vector<uint> res;
+    for(auto& t: gt_sys.getStations()) {
+        if (filter(t.second, param)) {
+            res.push_back(t.second.getId());
+            cout << " " << t.second << '\n';
+        }
+    }
+    cout << endl;
+
+    return res;
+}
+
+
+vector<uint> selectPipes(GTSystem& gt_sys) {
+    cout <<
+        "> Select filter "
+        "(by Name - 1, OnRepair - 2): ";
+    int res_filt = check_input(1, 2);
+
+    auto filter = CheckOnRepair;
+    void * param;
+    string name;
+    bool on_repair;
+
+    if (res_filt == 1) {
+        cout << "Enter name: ";
+        cin.ignore();
+        getline(cin, name);
+        param = &name;
+        filter = CheckPPName;
+    } else {
+        cout << "Enter on_repair: ";
+        on_repair = check_input(false, true);
+        cin.ignore();
+        param = &on_repair;
+    }
+
+    cout << endl;
+    PP_HEADER
+
+    vector<uint> res;
+    for(auto& t: gt_sys.getPipes()) {
+        if (filter(t.second, param)) {
+            res.push_back(t.second.getId());
+            cout << " " << t.second << '\n';
+        }
+    }
+    cout << endl;
+
+    return res;
 }
 
 
 void filterFind(GTSystem& gt_sys) {
     cout << "> Select type (Station - 1, Pipe - 2): ";
-    int res1 = check_input(1, 2);
+    int res_obj = check_input(1, 2);
 
-    bool (*filter) (const Pipe&, T );
+    if (res_obj == 1) {
+        selectStations(gt_sys);
+    } else {
+        selectPipes(gt_sys);
+    }
+}
 
-    if (res1 == 1){    // Station
-        cerr << "TODO:"; // TODO:
-    } else {            // Pipe
-        cout << "> Select filter (by Name - 1, OnRepair - 2): ";
-        int res = check_input(1, 2);
 
-        if (res == 1){
-            cerr << "TODO:"; // TODO:
-        } else {
-            filter = CheckOnRepair;
+void editPipe(GTSystem& gt_sys) {
+    if (gt_sys.getPipesNum() == 0) {
+        cout << " Empty" << endl;
+        return;
+    }
+
+    cout << "> Edit (by Index - 1, By Filter - 2): ";
+    int res = check_input(1, 2);
+
+    if (res == 1) {
+
+        Pipe p;
+        try {
+            cout << "Enter ID: ";
+            uint id = check_input(0, numeric_limits<int32_t>::max());
+            gt_sys.editPipe(id);
+
+        } catch (...) {
+            std::cout << "Error" << std::endl;
         }
+
+    } else {
+
+        vector<uint> selc_id = selectPipes(gt_sys);
+        if (selc_id.empty()) {
+            cout << " Empty" << endl;
+            return;
+        }
+
+        cout << "\nEdit:\n\n";
+        for (auto id: selc_id) {
+            gt_sys.editPipe(id);
+            cout << "\n\n";
+        }
+
     }
 
     cin.ignore();

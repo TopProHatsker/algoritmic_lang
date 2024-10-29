@@ -4,6 +4,7 @@
 
 
 
+
 void GTSystem::print(ostream& out){
 
     out << "Stations:\n";
@@ -79,4 +80,19 @@ int GTSystem::importFromFile(ifstream& ifs) {
     }
 
     return 0;
+}
+
+
+void GTSystem::editPipe(const uint ID) {
+    Pipe& p = this->pipes.at(ID);
+
+    p.print();
+
+    cout << "> Enter new repair status (1 - on repair | 0 - not): ";
+    bool new_repair_st = check_input(0, 1);
+    p.setRepairStatus(new_repair_st);
+
+    cout << "New pipe: " << endl;
+    p.print();
+
 }

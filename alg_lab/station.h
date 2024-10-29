@@ -15,7 +15,7 @@ class Station {
     string name = "";
     uint workshops_num = 0;
     uint workshops_work = 0;
-    double eff = 0.0;
+    float eff = 0.0;
 
 public:
 
@@ -65,6 +65,15 @@ public:
     uint getId() {
         return this->ID;
     }
+
+    string getName() const {
+        return this->name;
+    }
+
+    float getUnUsagePerc() const {
+        return (float)this->workshops_work / (float)this->workshops_num;
+    }
+
 };
 
 #endif // STATION_H

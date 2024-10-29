@@ -48,13 +48,19 @@ public:
         return this->pipes;
     }
 
-    // vector<Station>* getStations() {
-    //     return &this->stations;
-    // }
-
-    void editPipe() {
-
+    unordered_map<uint, Station> getStations() {
+        return this->stations;
     }
+
+    Pipe& getMPipe(const uint key) {
+        return this->pipes.at(key);
+    }
+
+    Station& getMStation (const uint key) {
+        return this->stations.at(key);
+    }
+
+    void editPipe(const uint ID);
 
 };
 

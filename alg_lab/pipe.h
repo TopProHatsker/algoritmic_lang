@@ -44,7 +44,7 @@ public:
     }
 
     void print() const {
-        cout << " ID: " << ID
+        cout << "ID: " << ID
              << "\tName: " << name
              << "\tDiameter: " << diameter
              << "\tLength: " << length
@@ -58,6 +58,10 @@ public:
 
     uint getId() const {
         return this->ID;
+    }
+
+    string getName() const {
+        return this->name;
     }
 
 };
