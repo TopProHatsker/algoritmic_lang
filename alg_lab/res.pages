@@ -7,14 +7,21 @@
 enum menu_id {
     NONE,
     START,
+
     M_PRINT,
     M_SAVE,
     M_IMPORT,
+
     M_ADD_PIPE,
     M_ADD_CS,
+
     M_EDIT_PIPE,
     M_EDIT_CS,
-    M_FILTER_FIND
+
+    M_FILTER_FIND,
+
+    M_DELETE_PIPE,
+    M_DELETE_CS
 };
 
 struct Button {
@@ -73,6 +80,14 @@ static const Book book = {
                 Button {
                     .data = "Edit Station",
                     .next = M_EDIT_CS
+                },
+                Button {
+                    .data = "Delete Pipe",
+                    .next = M_DELETE_PIPE
+                },
+                Button {
+                    .data = "Delete Station",
+                    .next = M_DELETE_CS
                 }
             }
         }

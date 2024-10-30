@@ -19,6 +19,7 @@ istream&  operator >> (istream& in, Station& station) {
     cout << "Efficiency: ";
     station.eff = check_input(0., 999.9);
 
+    in.ignore();
     return in;
 }
 

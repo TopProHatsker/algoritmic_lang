@@ -65,7 +65,7 @@ public:
 
         // - - - - - BOX - - - - -
         // Spacer
-        for(size_t i = 0; i < w.ws_row/3; i++)
+        for(size_t i = 0; i < w.ws_row/10; i++)
             printf("\n");
 
         // Head

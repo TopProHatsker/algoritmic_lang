@@ -83,8 +83,8 @@ int GTSystem::importFromFile(ifstream& ifs) {
 }
 
 
-void GTSystem::editPipe(const uint ID) {
-    Pipe& p = this->pipes.at(ID);
+void GTSystem::editPipe(const uint id) {
+    Pipe& p = this->pipes.at(id);
 
     p.print();
 
@@ -94,5 +94,20 @@ void GTSystem::editPipe(const uint ID) {
 
     cout << "New pipe: " << endl;
     p.print();
+
+}
+
+
+void GTSystem::editStation(const uint id) {
+    Station& s = this->stations.at(id);
+
+    s.print();
+
+    cout << "> Enter new working WS number: ";
+    uint wwsn = check_input((uint)0, s.getTotalWS());
+    s.setWorkWS(wwsn);
+
+    cout << "New station: " << endl;
+    s.print();
 
 }

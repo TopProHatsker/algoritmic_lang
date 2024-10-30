@@ -3,6 +3,7 @@
 
 #include "pipe.h"
 #include "station.h"
+#include <climits>
 #include <fstream>
 #include <iostream>
 #include <unordered_map>
@@ -37,11 +38,17 @@ public:
         return this->stations.size();
     }
 
-    void add(Pipe p) {
-        pipes.insert({p.getId(), p});
+    void addPipe(istream& is) {
+        Pipe p;
+        is >> p;
+        is.ignore();
+        pipes.emplace(p.getId(), p);
     }
-    void add(Station s) {
-        stations.insert({s.getId(), s});
+    void addStation(istream& is) {
+        Station s;
+        is >> s;
+        is.ignore();
+        stations.emplace(s.getId(), s);
     }
 
     unordered_map<uint, Pipe> getPipes() {
@@ -52,15 +59,40 @@ public:
         return this->stations;
     }
 
-    Pipe& getMPipe(const uint key) {
-        return this->pipes.at(key);
+    // Pipe& getMPipe(const uint key) {
+    //     return this->pipes.at(key);
+    // }
+
+    // Station& getMStation (const uint key) {
+    //     return this->stations.at(key);
+    // }
+
+    void editPipe   (const uint id);
+    void editStation(const uint id);
+
+    template <typename T>
+    void deleteObj(istream& is, ostream& os, unordered_map<uint, T>& arr) {
+        os << "> Enter id: ";
+        uint id;
+        cin >> id;
+        is.ignore();
+
+        auto iter = arr.find(id);
+        if (iter == arr.end()) {
+            os << " Not found." << endl;
+            return;
+        } else {
+            arr.erase(iter);
+            os << " ok." << endl;
+        }
     }
 
-    Station& getMStation (const uint key) {
-        return this->stations.at(key);
+    void deleteStation(istream& is, ostream& os) {
+        deleteObj(is, os, this->stations);
     }
-
-    void editPipe(const uint ID);
+    void deletePipe   (istream& is, ostream& os) {
+        deleteObj(is, os, this->pipes);
+    }
 
 };
 

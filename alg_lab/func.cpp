@@ -64,20 +64,20 @@ void load(GTSystem& gt_sys) {
 }
 
 
-void addPipe(GTSystem& gt_sys) {
-    Pipe p;
-    cin >> p;
-    gt_sys.add(p);
-    cin.ignore();
-}
+// void addPipe(GTSystem& gt_sys) {
+//     Pipe p;
+//     cin >> p;
+//     gt_sys.add(p);
+//     cin.ignore();
+// }
 
 
-void addStation(GTSystem& gt_sys) {
-    Station s;
-    cin >> s;
-    gt_sys.add(s);
-    cin.ignore();
-}
+// void addStation(GTSystem& gt_sys) {
+//     Station s;
+//     cin >> s;
+//     gt_sys.add(s);
+//     cin.ignore();
+// }
 
 /*
 void editPipe(GTSystem& gt_sys) {
@@ -136,8 +136,7 @@ void editStation(GTSystem& gt_sys) {
     cin.ignore();
 }
 */
-//template<typename T>
-//using Filter = bool(*)(const Pipe & p, T param);
+
 bool CheckPPName(const Pipe& p, const void * name) {
     return p.getName() == *(string*)name;
 }
@@ -240,8 +239,10 @@ void filterFind(GTSystem& gt_sys) {
 
     if (res_obj == 1) {
         selectStations(gt_sys);
+        // TODO: print here
     } else {
         selectPipes(gt_sys);
+        // TODO:
     }
 }
 
@@ -278,6 +279,48 @@ void editPipe(GTSystem& gt_sys) {
         cout << "\nEdit:\n\n";
         for (auto id: selc_id) {
             gt_sys.editPipe(id);
+            cout << "\n\n";
+        }
+
+    }
+
+    cin.ignore();
+}
+
+
+
+void editStation(GTSystem& gt_sys) {
+    if (gt_sys.getStationsNum() == 0) {
+        cout << " Empty" << endl;
+        return;
+    }
+
+    cout << "> Edit (by Index - 1, By Filter - 2): ";
+    int res = check_input(1, 2);
+
+    if (res == 1) {
+
+        Station s;
+        try {
+            cout << "Enter ID: ";
+            uint id = check_input(0, numeric_limits<int32_t>::max());
+            gt_sys.editStation(id);
+
+        } catch (...) {
+            std::cout << "Error" << std::endl;
+        }
+
+    } else {
+
+        vector<uint> selc_id = selectStations(gt_sys);
+        if (selc_id.empty()) {
+            cout << " Empty" << endl;
+            return;
+        }
+
+        cout << "\nEdit:\n\n";
+        for (auto id: selc_id) {
+            gt_sys.editStation(id);
             cout << "\n\n";
         }
 

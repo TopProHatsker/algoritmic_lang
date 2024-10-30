@@ -39,7 +39,7 @@ void load(GTSystem& gt_sys);
 void addPipe(GTSystem& gt_sys);
 void addStation(GTSystem& gt_sys);
 void editPipe(GTSystem& gt_sys);
-//void editStation(GTSystem& gt_sys);
+void editStation(GTSystem& gt_sys);
 
 void filterFind(GTSystem& gt_sys);
 

@@ -8,9 +8,9 @@ using namespace std;
 /*
  * _TODO:
  * [X] edit
- * [ ] delete
+ * [X] delete
  * [X] filer find
- * [ ] package changing
+ * [X] package changing
  */
 
 
@@ -51,12 +51,12 @@ int main() {
 
         case M_ADD_PIPE:
             cout << "\n - - - - - | Add pipe | - - - - -\n" << endl;
-            addPipe(gt_sys);
+            gt_sys.addPipe(cin);
             break;
 
         case M_ADD_CS:
             cout << "\n - - - - - | Add station | - - - - -\n" << endl;
-            addStation(gt_sys);
+            gt_sys.addStation(cin);
             break;
 
         case M_EDIT_PIPE:
@@ -66,7 +66,17 @@ int main() {
 
         case M_EDIT_CS:
             cout << "\n - - - - - | Edit station | - - - - -\n" << endl;
-            //editStation(gt_sys); // TODO:
+            editStation(gt_sys);
+            break;
+
+        case M_DELETE_PIPE:
+            cout << "\n - - - - - | Delete pipe | - - - - -\n" << endl;
+            gt_sys.deletePipe(cin, cout); // TODO:
+            break;
+
+        case M_DELETE_CS:
+            cout << "\n - - - - - | Delete station | - - - - -\n" << endl;
+            gt_sys.deleteStation(cin, cout); // TODO:
             break;
 
         default:

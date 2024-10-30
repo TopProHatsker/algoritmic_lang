@@ -49,7 +49,7 @@ public:
     }
 
     void print() {
-        cout << " UID: " << ID
+        cout << "UID: " << ID
              << "\tName: " << name
              << "\tTotal WS num: " << workshops_num
              << "\tWork WS num: " << workshops_work
