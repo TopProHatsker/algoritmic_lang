@@ -11,18 +11,15 @@ void GTSystem::print(ostream& out){
     if (stations.empty())
         out << " Empty" << endl;
     else {
-        //out << " ID\t"; out << "Name "; out << "Total\tWork WS\tEfficiency" << endl;
-        printf("  ID|          Name| Total|  Work|Efficiency\n");
-        printf("----+--------------+------+------+----------\n");
+        ST_HEADER
         print_arr(out, stations);
     }
+
     out << "\nPipes:\n";
     if (pipes.empty())
         out << " Empty" << endl;
     else {
-        //out << " ID\t"; out << "Name "; out << "Diam\tLength\tOnRepair" << endl;
-        printf("  ID|          Name|  Diam|Length|OnRepair\n");
-        printf("----+--------------+------+------+---------\n");
+        PP_HEADER
         print_arr(out, pipes);
     }
 
