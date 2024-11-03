@@ -177,17 +177,17 @@ vector<uint> selectStations(GTSystem& gt_sys) {
         param = &perc;
     }
 
-    cout << endl;
-    ST_HEADER
+    //cout << endl;
+    //ST_HEADER
 
     vector<uint> res;
     for(auto& t: gt_sys.getStations()) {
         if (filter(t.second, param)) {
             res.push_back(t.second.getId());
-            cout << " " << t.second << '\n';
+            //cout << " " << t.second << '\n';
         }
     }
-    cout << endl;
+    //cout << endl;
 
     return res;
 }
@@ -217,17 +217,17 @@ vector<uint> selectPipes(GTSystem& gt_sys) {
         param = &on_repair;
     }
 
-    cout << endl;
-    PP_HEADER
+    //cout << endl;
+    //PP_HEADER
 
     vector<uint> res;
     for(auto& t: gt_sys.getPipes()) {
         if (filter(t.second, param)) {
             res.push_back(t.second.getId());
-            cout << " " << t.second << '\n';
+            //cout << " " << t.second << '\n';
         }
     }
-    cout << endl;
+    //cout << endl;
 
     return res;
 }
@@ -238,11 +238,28 @@ void filterFind(GTSystem& gt_sys) {
     int res_obj = check_input(1, 2);
 
     if (res_obj == 1) {
-        selectStations(gt_sys);
-        // TODO: print here
+        auto arr = selectStations(gt_sys);
+
+        cout << endl;
+        ST_HEADER
+        for(auto& id: arr) {
+            Station t = gt_sys.getStation(id);
+            cout << " " << t << '\n';
+        }
+
+        cout << endl;
+
     } else {
-        selectPipes(gt_sys);
-        // TODO:
+        auto arr = selectPipes(gt_sys);
+
+        cout << endl;
+        PP_HEADER
+        for(auto& id: arr) {
+            Pipe t = gt_sys.getPipe(id);
+            cout << " " << t << '\n';
+        }
+
+        cout << endl;
     }
 }
 

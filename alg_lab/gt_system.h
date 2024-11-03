@@ -59,13 +59,13 @@ public:
         return this->stations;
     }
 
-    // Pipe& getMPipe(const uint key) {
-    //     return this->pipes.at(key);
-    // }
+    Pipe getPipe(const uint key) const {
+        return this->pipes.find(key)->second;
+    }
 
-    // Station& getMStation (const uint key) {
-    //     return this->stations.at(key);
-    // }
+    Station getStation (const uint key) const {
+        return this->stations.find(key)->second;
+    }
 
     void editPipe   (const uint id);
     void editStation(const uint id);

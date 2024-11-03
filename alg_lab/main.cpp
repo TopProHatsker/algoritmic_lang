@@ -7,10 +7,9 @@ using namespace std;
 
 /*
  * _TODO:
- * [X] edit
- * [X] delete
- * [X] filer find
- * [X] package changing
+ * [ ] добавить возможность соединения труб и КС в газотранспортную сеть;
+ * [ ] реализовать топологическую сортировку полученного графа.
+ *
  */
 
 
@@ -71,12 +70,12 @@ int main() {
 
         case M_DELETE_PIPE:
             cout << "\n - - - - - | Delete pipe | - - - - -\n" << endl;
-            gt_sys.deletePipe(cin, cout); // TODO:
+            gt_sys.deletePipe(cin, cout);
             break;
 
         case M_DELETE_CS:
             cout << "\n - - - - - | Delete station | - - - - -\n" << endl;
-            gt_sys.deleteStation(cin, cout); // TODO:
+            gt_sys.deleteStation(cin, cout);
             break;
 
         default:
