@@ -2,7 +2,7 @@
 Algorithmic languages homework
 
 Progress:
-1) *
+1) v
 2) *
-3)
+3) *
 4)
