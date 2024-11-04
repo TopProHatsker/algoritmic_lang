@@ -46,12 +46,12 @@ void filterFind(GTSystem& gt_sys);
 
 
 #define ST_HEADER \
-    printf("  ID|          Name| Total|  Work|Efficiency\n"); \
-    printf("----+--------------+------+------+----------\n");
+    printf("  ID|                 Name| Total|  Work|Efficiency\n"); \
+    printf("----+---------------------+------+------+----------\n");
 
 #define PP_HEADER \
-    printf("  ID|          Name|  Diam|Length|OnRepair\n"); \
-    printf("----+--------------+------+------+---------\n");
+    printf("  ID|                 Name|  Diam|Length|OnRepair\n"); \
+    printf("----+---------------------+------+------+---------\n");
 
 
 

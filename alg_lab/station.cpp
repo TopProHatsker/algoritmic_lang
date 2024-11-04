@@ -19,7 +19,7 @@ istream&  operator >> (istream& in, Station& station) {
     cout << "Efficiency: ";
     station.eff = check_input(0., 999.9);
 
-    in.ignore();
+    //in.ignore();
     return in;
 }
 
@@ -35,7 +35,7 @@ istream&  operator >> (istream& in, Station& station) {
 // }
 
 ostream&  operator << (ostream& out, Station& station) {
-    printf("%3d| %13s| %5.d| %5.d| %8.f",
+    printf("%3d| %20s| %5.d| %5.d| %8.f",
            station.ID,
            station.name.c_str(),
            station.workshops_num,

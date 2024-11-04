@@ -5,23 +5,32 @@
 #include <vector>
 
 enum menu_id {
+    // PAGES
     NONE,
     START,
+    GRAPH,
+    PIPE,
+    STATION,
 
+    // START PAGE
     M_PRINT,
     M_SAVE,
     M_IMPORT,
-
-    M_ADD_PIPE,
-    M_ADD_CS,
-
-    M_EDIT_PIPE,
-    M_EDIT_CS,
-
     M_FILTER_FIND,
 
-    M_DELETE_PIPE,
-    M_DELETE_CS
+    // PIPE PAGE
+    PP_ADD,
+    PP_EDIT,
+    PP_DELETE,
+
+    // STATION PAGE
+    CS_ADD,
+    CS_EDIT,
+    CS_DELETE,
+
+    // GRAPH PAGE
+    GP_PRINT,
+    GP_ADDEDGE
 };
 
 struct Button {
@@ -66,29 +75,103 @@ static const Book book = {
                     .next = M_IMPORT
                 },
                 Button {
-                    .data = "Add Pipe",
-                    .next = M_ADD_PIPE
+                    .data = "Pipe",
+                    .next = PIPE
                 },
                 Button {
-                    .data = "Add Station",
-                    .next = M_ADD_CS
+                    .data = "Station",
+                    .next = STATION
                 },
+                // Button {
+                //     .data = "Add Pipe",
+                //     .next = PP_ADD
+                // },
+                // Button {
+                //     .data = "Add Station",
+                //     .next = CS_ADD
+                // },
+                // Button {
+                //     .data = "Edit Pipe",
+                //     .next = PP_EDIT
+                // },
+                // Button {
+                //     .data = "Edit Station",
+                //     .next = CS_EDIT
+                // },
+                // Button {
+                //     .data = "Delete Pipe",
+                //     .next = PP_DELETE
+                // },
+                // Button {
+                //     .data = "Delete Station",
+                //     .next = CS_DELETE
+                // },
                 Button {
-                    .data = "Edit Pipe",
-                    .next = M_EDIT_PIPE
-                },
-                Button {
-                    .data = "Edit Station",
-                    .next = M_EDIT_CS
-                },
-                Button {
-                    .data = "Delete Pipe",
-                    .next = M_DELETE_PIPE
-                },
-                Button {
-                    .data = "Delete Station",
-                    .next = M_DELETE_CS
+                    .data = "Graph",
+                    .next = GRAPH
                 }
+            }
+        },
+        Page{
+            .id = PIPE,
+            .title = " Pipe ",
+            .btn = {
+                Button {
+                    .data = "Exit",
+                    .next = START
+                },
+                Button {
+                    .data = "Add",
+                    .next = PP_ADD
+                },
+                Button {
+                    .data = "Edit",
+                    .next = PP_EDIT
+                },
+                Button {
+                    .data = "Delete",
+                    .next = PP_DELETE
+                }
+            }
+        },
+        Page{
+            .id = STATION,
+            .title = " Station ",
+            .btn = {
+                Button {
+                    .data = "Exit",
+                    .next = START
+                },
+                Button {
+                    .data = "Add",
+                    .next = CS_ADD
+                },
+                Button {
+                    .data = "Edit",
+                    .next = CS_EDIT
+                },
+                Button {
+                    .data = "Delete",
+                    .next = CS_DELETE
+                }
+            }
+        },
+        Page{
+            .id = GRAPH,
+            .title = " Graph ",
+            .btn = {
+                 Button {
+                     .data = "Exit",
+                     .next = START
+                 },
+                 Button {
+                     .data = "Print",
+                     .next = GP_PRINT
+                 },
+                 Button {
+                     .data = "Add edge",
+                     .next = GP_ADDEDGE
+                 }
             }
         }
     }

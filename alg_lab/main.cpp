@@ -2,18 +2,44 @@
 #include "new_menu.h"
 #include "func.h"
 #include "gt_system.h"
+#include "graph.h"
 
 using namespace std;
 
 /*
  * _TODO:
- * [ ] добавить возможность соединения труб и КС в газотранспортную сеть;
- * [ ] реализовать топологическую сортировку полученного графа.
- *
+ * [ ] FIX: Add edge. Need use exist pipes
+ * [ ] выбор станций в пакетном редактировании из найденных
  */
 
 
 int main() {
+
+    // FIXME
+    // - - - - - - - - - - - - - - - - - -
+
+    // vector ребер Graph согласно схеме выше
+    vector<Edge> edges =
+        {
+            {0, 1, 6},
+            {1, 2, 2},
+            {1, 3, 4},
+            {1, 4, 6},
+            {3, 5, 0},
+            {3, 6, 4},
+            {5, 7, 1},
+            //{7, 8, 0},
+            //{7, 9, 1}
+        };
+
+    // строим graph из заданных ребер
+    Graph graph;
+
+    for (auto t: edges)
+        graph.addEdge(t);
+
+
+    // - - - - - - - - - - - - - - - - - -
 
     NewMenu menu;
     menu.auto_size();
@@ -31,58 +57,80 @@ int main() {
         case M_PRINT:
             cout << "\n - - - - - | Print Info | - - - - -\n" << endl;
             gt_sys.print(cout);
+            waitEnter();
             break;
 
         case M_FILTER_FIND:
             cout << "\n - - - - - | Filter Find | - - - - -\n" << endl;
             filterFind(gt_sys);
+            waitEnter();
             break;
 
         case M_SAVE:
             cout << "\n - - - - - | Save Data | - - - - -\n" << endl;
             save(gt_sys);
+            waitEnter();
             break;
 
         case M_IMPORT:
             cout << "\n - - - - - | Import Data | - - - - -\n" << endl;
             load(gt_sys);
+            waitEnter();
             break;
 
-        case M_ADD_PIPE:
+        case PP_ADD:
             cout << "\n - - - - - | Add pipe | - - - - -\n" << endl;
             gt_sys.addPipe(cin);
+            waitEnter();
             break;
 
-        case M_ADD_CS:
+        case CS_ADD:
             cout << "\n - - - - - | Add station | - - - - -\n" << endl;
             gt_sys.addStation(cin);
+            waitEnter();
             break;
 
-        case M_EDIT_PIPE:
+        case PP_EDIT:
             cout << "\n - - - - - | Edit pipe | - - - - -\n" << endl;
             editPipe(gt_sys);
+            waitEnter();
             break;
 
-        case M_EDIT_CS:
+        case CS_EDIT:
             cout << "\n - - - - - | Edit station | - - - - -\n" << endl;
             editStation(gt_sys);
+            waitEnter();
             break;
 
-        case M_DELETE_PIPE:
+        case PP_DELETE:
             cout << "\n - - - - - | Delete pipe | - - - - -\n" << endl;
             gt_sys.deletePipe(cin, cout);
+            waitEnter();
             break;
 
-        case M_DELETE_CS:
+        case CS_DELETE:
             cout << "\n - - - - - | Delete station | - - - - -\n" << endl;
             gt_sys.deleteStation(cin, cout);
+            waitEnter();
+            break;
+
+        case GP_PRINT:
+            cout << "\n - - - - - | Print Graph | - - - - -\n" << endl;
+            printGraph(graph, gt_sys.getStations());
+            waitEnter();
+            break;
+
+        case GP_ADDEDGE:
+            cout << "\n - - - - - | Add edge in Graph | - - - - -\n" << endl;
+            addEdge(graph);
+            waitEnter();
             break;
 
         default:
+            //waitEnter();
             break;
         }
 
-        waitEnter();
     }
 
     cout << "Goodbye!" << endl;

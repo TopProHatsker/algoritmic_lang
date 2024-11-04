@@ -18,6 +18,8 @@ add_executable(alg_lab
     gt_system.cpp
     station.cpp
     pipe.cpp
+    graph.cpp
+    graph.h
     )
 
 include(GNUInstallDirs)
