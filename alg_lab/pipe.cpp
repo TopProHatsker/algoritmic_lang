@@ -1,7 +1,7 @@
 #include "pipe.h"
 #include "func.h"
 
-uint Pipe::PP_MaxID = 0;
+uint Pipe::PP_MaxID = 1;
 
 istream&  operator >> (istream& in, Pipe& pipe) {
     cout << "Name: ";
@@ -17,67 +17,84 @@ istream&  operator >> (istream& in, Pipe& pipe) {
     cout << "On repair? (1 - yes, 0 - no): ";
     pipe.on_repair = check_input(0, 1);
 
+    pipe.src_ID = 0;
+    pipe.dest_ID = 0;
+
     return in;
 }
 
 
-ostream&  operator << (ostream& out, Pipe& pipe) {
-
-    // std::locale::global(std::locale("ru_RU.UTF-8"));
-    // std::wcout.imbue(std::locale(""));
-
-    out.fill(' ');
-    out.width(3);
-    out << pipe.ID << "| ";
-
-    out.width(20);
-    out << pipe.name << "| ";
-
-    out.width(5);
-    out << pipe.diameter << "| ";
-
-    out.width(5);
-    out << pipe.length << "| ";
-
-    out.width(7);
-    out << pipe.on_repair;
-
-    return out;
-}
-
 // ostream&  operator << (ostream& out, Pipe& pipe) {
-//     //wchar_t* t = pipe.name;
-//     printf("%3d| %20s| %5.lf| %5.lf| %7.d",
-//            pipe.ID,
-//            pipe.name.c_str(),
-//            pipe.diameter,
-//            pipe.length,
-//            pipe.on_repair
-//     );
+
+//     // std::locale::global(std::locale("ru_RU.UTF-8"));
+//     // std::wcout.imbue(std::locale(""));
+//     out.fill(' ');
+//     out.width(3);
+//     out << pipe.ID << "| ";
+
+//     out.fill(' ');
+//     out.width(3);
+//     out << pipe.src_ID << "| ";
+
+//     out.fill(' ');
+//     out.width(3);
+//     out << pipe.dest_ID << "| ";
+
+//     out.width(20);
+//     out << pipe.name << "| ";
+
+//     out.width(5);
+//     out << pipe.diameter << "| ";
+
+//     out.width(5);
+//     out << pipe.length << "| ";
+
+//     out.width(7);
+//     out << pipe.on_repair;
 
 //     return out;
 // }
 
+ostream&  operator << (ostream& out, Pipe& pipe) {
+    printf("%3.d| %3.d| %3.d| %20s| %5.d| %5.lf| %7.d",
+           pipe.ID,
+           pipe.src_ID,
+           pipe.dest_ID,
+           pipe.name.c_str(),
+           pipe.diameter,
+           pipe.length,
+           pipe.on_repair
+    );
+
+    return out;
+}
+
 
 ofstream& operator << (ofstream& ofs, Pipe& pipe) {
-    //ofs << pipe.ID      << '\n';
     ofs << pipe.name      << '\n';
     ofs << pipe.diameter  << '\n';
     ofs << pipe.length    << '\n';
     ofs << pipe.on_repair << '\n';
+
+    ofs << pipe.ID        << '\n';
+    ofs << pipe.src_ID    << '\n';
+    ofs << pipe.dest_ID   << '\n';
 
     return ofs;
 }
 
 
 ifstream& operator >> (ifstream& ifs, Pipe& pipe) {
-    //ifs >> pipe.ID;
     ifs.ignore();   // Ignore '\n' after numbers row
     getline(ifs, pipe.name);
     //ifs >> pipe.name;
     ifs >> pipe.diameter;
     ifs >> pipe.length;
     ifs >> pipe.on_repair;
+
+    ifs >> pipe.ID;
+    ifs >> pipe.src_ID;
+    ifs >> pipe.dest_ID;
 
     return ifs;
 }

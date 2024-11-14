@@ -6,166 +6,110 @@
 using namespace std;
 
 
-std::istream& operator>>(std::istream& is, Edge& edge) {
-    std::cout << " Source CS id: ";
-    is >> edge.st_src;
-
-    std::cout << " Destination CS id: ";
-    is >> edge.st_dest;
-
-    std::cout << " Pipe id: ";   // FIXME
-    is >> edge.pipe;
-
-    is.ignore();
-    return is;
+void Graph::loadMatrix(const std::vector<std::vector<uint>>& mtr) {
+    this->adjMtr = mtr;
 }
 
 
-
-
-// Выполняем поиск в глубину на Graphе и устанавливаем время отправления всех
-// вершины Graph
-void DFS(
-    Graph const &graph,
+void Graph::topologicalSortUtil(
     int v,
-    vector<bool> &discovered,
-    vector<int> &departure,
-    int &time
-){
+    const std::vector<std::vector<uint>>& adjMatrix,
+    std::vector<bool>& visited,
+    std::stack<uint>& Stack
+) {
 
-    // помечаем текущий узел как обнаруженный
-    discovered[v] = true;
+    visited[v] = true;
 
-    // устанавливаем время прибытия вершины `v`
-    time++;
-
-    // делаем для каждого ребра (v, u)
-    for (int u: graph.adjList[v])
-    {
-        // если `u` еще не обнаружен
-        if (!discovered[u]) {
-            DFS(graph, u, discovered, departure, time);
+    // Рекурсивно посещаем все вершины, смежные с текущей
+    for (int i = 0; i < adjMatrix.size(); ++i) {
+        if (adjMatrix[v][i] && !visited[i]) {
+            topologicalSortUtil(i, adjMatrix, visited, Stack);
         }
     }
 
-    // готов к возврату
-    // устанавливаем время отправления вершины `v`
-    departure[time] = v;
-    time++;
+    // Добавляем текущую вершину в стек
+    Stack.push(v);
 }
 
-// Функция для выполнения топологической сортировки заданной DAG
-vector<uint> doTopologicalSort(Graph const &graph) {
+std::stack<uint> Graph::topologicalSort(const std::vector<std::vector<uint>>& adjMatrix) {
+    std::stack<uint> id_stack;
+    std::vector<bool> visited(adjMatrix.size(), false);
 
-    uint n = graph.getSize();
-
-    // departure[] сохраняет номер вершины, используя время отправления в качестве индекса
-    vector<int> departure(2*n, -1);
-
-    /* Если бы мы сделали наоборот, т.е. заполнили бы массив
-       со временем отправления, используя номер вершины в качестве индекса, мы бы
-       нужно отсортировать позже */
-
-    // чтобы отслеживать, открыта вершина или нет
-    vector<bool> discovered(n);
-    int time = 0;
-
-    // выполняем поиск в глубину на всех неоткрытых вершинах
-    for (uint i = 0; i < n; i++)
-    {
-        if (!discovered[i]) {
-            DFS(graph, i, discovered, departure, time);
+    // Вызываем рекурсивную функцию для всех вершин графа
+    for (int i = 0; i < adjMatrix.size(); ++i) {
+        if (!visited[i]) {
+            topologicalSortUtil(i, adjMatrix, visited, id_stack);
         }
     }
 
-    vector<uint> dep_arr;
-    // Печатаем вершины в порядке их убывания
-    // время отправления в DFS, т.е. в топологическом порядке
-    for (int i = 2*n - 1; i >= 0; i--)
-    {
-        if (departure[i] != -1) {
-            //cout << departure[i] << " ";
-            dep_arr.push_back(departure[i]);
-        }
+    return id_stack;
+    // Печатаем элементы топологической сортировки
+    // while (!Stack.empty()) {
+    //     std::cout << Stack.top() + 1 << " ";
+    //     Stack.pop();
+    // }
+}
+
+
+void Graph::printTopolog(std::ostream& os) {
+    // this->adjMtr = {
+    //     {0, 0, 0, 1, 0},
+    //     {0, 0, 0, 0, 1},
+    //     {0, 1, 0, 0, 0},
+    //     {0, 0, 1, 0, 0},
+    //     {0, 0, 0, 1, 0}
+    // };
+
+    if (this->adjMtr.empty()) {
+        os << "> Empty" << std::endl;
+        return;
     }
+    os << "\n\nТопологическая сортировка графа:\n\n";
+    std::stack<uint> sorted_id = this->topologicalSort(this->adjMtr);
 
-    return dep_arr;
-}
-
-
-int graph_main()
-{
-    // vector ребер Graph согласно схеме выше
-    vector<Edge> edges =
-        {
-            {0, 1, 6},
-            {1, 2, 2},
-            {1, 3, 4},
-            {1, 4, 6},
-            {3, 5, 0},
-            {3, 6, 4},
-            {5, 7, 1},
-            {7, 8, 0},
-            {7, 9, 1}
-        };
-
-    // строим graph из заданных ребер
-    Graph graph;         // Указываем число вершин
-
-    for (auto t: edges)
-        graph.addEdge(t);
-
-    graph.gen();
-    graph.print();
-
-    // выполняем топологическую сортировку
-    cout << "Topolog sort: ";
-    doTopologicalSort(graph);
-    cout << endl;
-
-    return 0;
-}
-
-
-void addEdge(Graph &graph) {
-    cout << "> New Edge:\n";
-
-    Edge new_edge;
-    cin >> new_edge;
-
-    graph.addEdge(new_edge);
-
-}
-
-void printGraph(Graph& graph, unordered_map<uint, Station> stations) {
-    graph.print();
-
-    cout << "\nTopolog sort: ";
-    vector<uint> arr = doTopologicalSort(graph);
-
-    for (auto t: arr)
-        cout << t << " ";
-
-    cout << "\n\nStation names:\n\n";
-
-    for (uint i = 0; i < arr.size(); i++) {
-        string name = "None";
-        auto t = stations.find(arr[i]);
-
-        if (t != stations.end())
-            name = t->second.getName();
-
-        cout
-            << " "
-            << (i % 2 ? '\\' : '/')
-            << '^'
-            << (i % 2 ? '\\' : '/')
+    for (uint i = 0; !sorted_id.empty(); i++) {
+        os
             << "  "
-            << name
+            << (i % 2 ? "/" : "\\")
+            << "^"
+            << (i % 2 ? "/" : "\\")
+            << "  "
+            << sorted_id.top() + 1
             << "\n";
+
+        sorted_id.pop();
+    }
+}
+
+
+void Graph::printMatrix(std::ostream& os) const {
+    os << "Матрица смежности:\n\n";
+    if (this->adjMtr.empty()) {
+        os << "> Empty" << std::endl;
+        return;
     }
 
+    os << "   ";
+    for (uint i = 1; i <= this->adjMtr.size(); i++) {
+        //os << i << "   ";
+        printf("%4d|", i);
+    }
+    os << "\n  г";
 
-    cout << endl;
+    for (uint i = 0; i < this->adjMtr.size(); i++) {
+        printf("----+");
+    }
+    os << std::endl;
+
+    for (uint i = 0; i < this->adjMtr.size(); i++) {
+        os << " " << i + 1 << "|";
+        for (uint j = 0; j < this->adjMtr.size(); j++) {
+            if (adjMtr[i][j])
+                printf("%4d|", adjMtr[i][j]);
+            else
+                printf("  - |");
+        }
+        os << std::endl;
+    }
 
 }

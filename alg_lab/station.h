@@ -12,6 +12,9 @@ class Station {
     static uint ST_MaxID;
 
     uint ID = 0;
+    //uint src_ID = 0;
+    //uint dest_ID = 0;
+
     string name = "";
     uint workshops_num = 0;
     uint workshops_work = 0;
@@ -46,6 +49,10 @@ public:
 
         this->workshops_work = num;
         return 0;
+    }
+
+    void setEfficiency(float eff) {
+        this->eff = eff;
     }
 
     void print() {

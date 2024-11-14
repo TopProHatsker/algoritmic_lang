@@ -7,6 +7,8 @@
 #include <fstream>
 #include <iostream>
 #include <unordered_map>
+#include <vector>
+
 
 
 class GTSystem {
@@ -27,13 +29,15 @@ public:
     }
 
     void print(ostream& out);
+    void printStations(ostream& out);
+    void printPipes(ostream& out);
+
     int saveToFile(ofstream& ofs);
     int importFromFile(ifstream& ifs);
 
     uint getPipesNum() {
         return this->pipes.size();
     }
-
     uint getStationsNum() {
         return this->stations.size();
     }
@@ -63,12 +67,32 @@ public:
         return this->pipes.find(key)->second;
     }
 
-    Station getStation (const uint key) const {
+    const Station& getStation (const uint key) const {
+        // auto t = this->stations.find(key);
+        // if (t != this->stations.end())
+        //     return t->second;
         return this->stations.find(key)->second;
+        //return this->stations[key];
     }
 
     void editPipe   (const uint id);
+    int editPipeStatus (const uint id, const uint status) {
+        auto t = this->pipes.find(id);
+        if (t != this->pipes.end()) {
+            t->second.setRepairStatus(status);
+            return 0;
+        }
+        return 1;
+    }
     void editStation(const uint id);
+    int editStationEff(const uint id, const float eff) {
+        auto t = this->stations.find(id);
+        if (t != this->stations.end()) {
+            t->second.setEfficiency(eff);
+            return 0;
+        }
+        return 1;
+    }
 
     template <typename T>
     void deleteObj(istream& is, ostream& os, unordered_map<uint, T>& arr) {
@@ -87,11 +111,87 @@ public:
         }
     }
 
+    template <typename T>
+    int deleteObj(uint id, unordered_map<uint, T>& arr) {
+        auto iter = arr.find(id);
+        if (iter == arr.end()) {
+            return 1;
+        } else {
+            arr.erase(iter);
+            return 0;
+        }
+    }
+
     void deleteStation(istream& is, ostream& os) {
         deleteObj(is, os, this->stations);
+        // TODO: Check connection
     }
     void deletePipe   (istream& is, ostream& os) {
-        deleteObj(is, os, this->pipes);
+        os << "> Enter id: ";
+        uint id;
+        cin >> id;
+        is.ignore();
+
+        auto iter = pipes.find(id);
+        if (iter == this->pipes.end()) {
+            os << " Not found." << endl;
+            return;
+        } else {
+            os << "> Founded" << endl;
+        }
+
+        os << "> Pipe status: ";
+        if (iter->second.isConnected()) {
+            os << "Connected" << endl;
+
+            os << "> Want to delete pipe anyway [N/y]: ";
+            string res;
+            getline(is, res);
+            if (res[0] == 'y') {
+                // this->pipes.erase(iter);
+                // os << "> Deleted" << endl;
+            } else {
+                return;
+            }
+
+        } else {
+            os << "Not Connected" << endl;
+        }
+
+        this->pipes.erase(iter);
+        os << "> Deleted" << endl;
+
+    }
+
+
+    bool isStation(uint key) const {
+        return this->stations.find(key) != this->stations.end();
+    }
+    bool isPipe(uint key) const {
+        return this->pipes.find(key) != this->pipes.end();
+    }
+
+    void connectPipe(istream& is, ostream& os);
+    void disconnectPipe(istream& is, ostream& os);
+
+    vector<uint> getPipes(bool (*filter) (const Pipe& p, const void * diam), void * size);
+
+    vector<vector<uint>> getMaxtrix() {
+        vector<uint> row = {0};
+        row.resize(this->getStationsNum());
+        vector<vector<uint>> mtr;
+        for (uint i = 0; i < this->getStationsNum(); i++)
+            mtr.push_back(row);
+
+        for (auto& t: this->pipes) {
+            pair<uint, uint> ids = t.second.getSTid();
+            if (ids.first > 0 && ids.second > 0) {
+                mtr[ids.first - 1][ids.second - 1] = t.second.getLength();
+                //mtr[ids.second][ids.first] = t.second.getLength(); // TODO:
+            }
+        }
+
+        return mtr;
     }
 
 };

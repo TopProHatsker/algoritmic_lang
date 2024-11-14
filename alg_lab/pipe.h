@@ -11,9 +11,12 @@ class Pipe {
     static uint PP_MaxID;
 
     uint ID = 0;
+    uint src_ID = 0;
+    uint dest_ID = 0;
+
     string name = "";
     double length = 0;
-    double diameter = 0;
+    uint diameter = 0;
     bool on_repair = false;
 
 public:
@@ -62,6 +65,32 @@ public:
 
     string getName() const {
         return this->name;
+    }
+
+    uint getDiam() const {
+        return this->diameter;
+    }
+
+    uint getLength() const {
+        return this->length;
+    }
+
+    bool isConnected() const {
+        return (bool)this->src_ID + (bool)this->dest_ID;
+    }
+
+    void connect(uint src_id, uint dest_id) {
+        this->src_ID = src_id;
+        this->dest_ID = dest_id;
+    }
+
+    void disconnect() {
+        this->src_ID = 0;
+        this->dest_ID = 0;
+    }
+
+    pair<uint, uint> getSTid() {
+        return {this->src_ID, this->dest_ID};
     }
 
 };

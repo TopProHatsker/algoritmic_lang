@@ -8,7 +8,8 @@ using namespace std;
 
 /*
  * _TODO:
- * [ ] FIX: Add edge. Need use exist pipes
+ * [ ] Удаление станций
+ * [ ] Перенести пакетное радактирование в GTSystem
  * [ ] выбор станций в пакетном редактировании из найденных
  */
 
@@ -18,26 +19,8 @@ int main() {
     // FIXME
     // - - - - - - - - - - - - - - - - - -
 
-    // vector ребер Graph согласно схеме выше
-    vector<Edge> edges =
-        {
-            {0, 1, 6},
-            {1, 2, 2},
-            {1, 3, 4},
-            {1, 4, 6},
-            {3, 5, 0},
-            {3, 6, 4},
-            {5, 7, 1},
-            //{7, 8, 0},
-            //{7, 9, 1}
-        };
-
-    // строим graph из заданных ребер
+    // // строим graph из заданных ребер
     Graph graph;
-
-    for (auto t: edges)
-        graph.addEdge(t);
-
 
     // - - - - - - - - - - - - - - - - - -
 
@@ -45,6 +28,14 @@ int main() {
     menu.auto_size();
 
     GTSystem gt_sys;
+
+    // - - - - - - - - - - - -
+    ifstream ifs;
+    ifs.open("rus1");
+    gt_sys.importFromFile(ifs);
+    ifs.close();
+    // - - - - - - - - - - - -
+
 
     menu_id next = START;
 
@@ -116,13 +107,21 @@ int main() {
 
         case GP_PRINT:
             cout << "\n - - - - - | Print Graph | - - - - -\n" << endl;
-            printGraph(graph, gt_sys.getStations());
+            graph.loadMatrix(gt_sys.getMaxtrix());
+            graph.printMatrix(cout);
+            graph.printTopolog(cout);
             waitEnter();
             break;
 
         case GP_ADDEDGE:
             cout << "\n - - - - - | Add edge in Graph | - - - - -\n" << endl;
-            addEdge(graph);
+            gt_sys.connectPipe(cin, cout);
+            waitEnter();
+            break;
+
+        case GP_REMOVE_EDGE:
+            cout << "\n - - - - - | Remove edge from Graph | - - - - -\n" << endl;
+            gt_sys.disconnectPipe(cin, cout);
             waitEnter();
             break;
 

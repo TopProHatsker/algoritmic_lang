@@ -2,7 +2,8 @@
 #include <cstdint>
 #include <vector>
 #include <limits>
-
+#include <sstream>
+#include <algorithm>
 
 void waitEnter() {
     cout << "\n < Press Enter to continue >" << endl;
@@ -64,78 +65,9 @@ void load(GTSystem& gt_sys) {
 }
 
 
-// void addPipe(GTSystem& gt_sys) {
-//     Pipe p;
-//     cin >> p;
-//     gt_sys.add(p);
-//     cin.ignore();
+// bool CheckPPDiamAndFree(const Pipe& p, const void * diam) {
+//     return (p.getDiam() == *(uint*)diam) && (p.isConnected() == 0);
 // }
-
-
-// void addStation(GTSystem& gt_sys) {
-//     Station s;
-//     cin >> s;
-//     gt_sys.add(s);
-//     cin.ignore();
-// }
-
-/*
-void editPipe(GTSystem& gt_sys) {
-    cout << "Pipes:" << endl;
-    auto pipes = gt_sys.getPipes();
-    print_vector(cout, pipes);
-
-    if (!pipes.size())
-        return;
-
-    cout << "Enter num to edit: ";
-    uint num = check_input(1, (int)pipes.size());
-    num--;
-    //gts.editPipe(num, state);
-    //Pipe* pipe = &(*pipes)[num];
-    pipes[num].setRepairStatus(true);
-    pipes[num].print();
-    Pipe& yaPipe = &(*pipes->begin()) + sizeof(Pipe)*num;
-    yaPipe->print();
-    pipe->print();
-
-    cout << "\nEnter new repair status (1 - on repair | 0 - not): ";
-    bool new_repair_st = check_input(0, 1);
-    pipe->setRepairStatus(new_repair_st);
-
-    cout << "\nNew pipe: " << endl;
-    pipe->print();
-
-    cin.ignore();
-}
-*/
-
-/*
-void editStation(GTSystem& gt_sys) {
-    cout << "Stations:" << endl;
-    auto stations = gt_sys.getStations();
-    print_vector(cout, *stations);
-
-    if (!stations->size())
-        return;
-
-    cout << "Enter num to edit: ";
-    uint num = check_input(1, (int)stations->size());
-    num--;
-
-    Station* station = &(*stations)[num];
-    station->print();
-
-    cout << "Enter new work WS number: ";
-    uint new_WS_num = check_input(0, (int)station->getTotalWS());
-    station->setWorkWS(new_WS_num);
-
-    cout << "\nNew station: " << endl;
-    station->print();
-
-    cin.ignore();
-}
-*/
 
 bool CheckPPName(const Pipe& p, const void * name) {
     return p.getName() == *(string*)name;
@@ -152,6 +84,15 @@ bool CheckSTName(const Station& s, const void * name) {
 bool CheckPercent(const Station& s, const void * perc) {
     return s.getUnUsagePerc() >= *(float*)perc;
 }
+
+bool CheckPPDiamAndFree(const Pipe& p, const void * diam) {
+    return (p.getDiam() == *(uint*)diam) && (p.isConnected() == 0);
+}
+
+bool CheckPPConnected(const Pipe& p, const void * is_connected) {
+    return p.isConnected() == *(bool*)is_connected;
+}
+
 
 vector<uint> selectStations(GTSystem& gt_sys) {
     cout <<
@@ -264,6 +205,67 @@ void filterFind(GTSystem& gt_sys) {
 }
 
 
+void enterNewRepairStatus(GTSystem& gt_sys, vector<uint> id) {
+    cout << "\n Enter new repair status: ";
+    bool status = check_input(false, true);
+    for (auto t: id) {
+        gt_sys.editPipeStatus(t, status);
+    }
+}
+
+
+void enterNewEfficiency(GTSystem& gt_sys, vector<uint> id) {
+    cout << "\n Enter new efficiency: ";
+    float eff = check_input(0., 10.);
+    for (auto t: id) {
+        gt_sys.editStationEff(t, eff);
+    }
+}
+
+
+vector<uint> readNumbers() {
+    vector<uint> numbers;
+    string line;
+
+    // Считываем всю строку
+    cin.ignore();
+    getline(cin, line);
+    istringstream iss(line);
+    uint number;
+
+    // Извлекаем числа из строки
+    while (iss >> number) {
+        numbers.push_back(number);
+    }
+
+    return numbers;
+}
+
+vector<uint> selectSertain(vector<uint> Numbers) {
+
+    cout << "\n Enter IDs to edit (1 2 5...): ";
+    vector<uint> userNumbers = readNumbers();
+
+    // Вектор для хранения совпадающих чисел
+    vector<uint> matchingNum;
+
+    // Находим совпадающие числа
+    for (uint t : userNumbers) {
+        if (
+            find(
+                Numbers.begin(),
+                Numbers.end(),
+                t
+            ) != Numbers.end()
+
+        ) {
+            matchingNum.push_back(t);
+        }
+    }
+
+    return matchingNum;
+}
+
 void editPipe(GTSystem& gt_sys) {
     if (gt_sys.getPipesNum() == 0) {
         cout << " Empty" << endl;
@@ -293,11 +295,36 @@ void editPipe(GTSystem& gt_sys) {
             return;
         }
 
-        cout << "\nEdit:\n\n";
-        for (auto id: selc_id) {
-            gt_sys.editPipe(id);
-            cout << "\n\n";
+        cout << "\n";
+        PP_HEADER
+        for(auto& id: selc_id) {
+            Pipe t = gt_sys.getPipe(id);
+            cout << " " << t << '\n';
         }
+        cout << endl;
+
+        cout << "> Edit (All - 1, Certain - 2): ";
+        uint res2 = check_input(1, 2);
+
+        if (res2 == 1) {
+            enterNewRepairStatus(gt_sys, selc_id);
+        } else {
+            vector<uint> ids = selectSertain(selc_id);
+
+            // // Выводим совпадающие числа
+            // if (!ids.empty()) {
+            //     std::cout << "Совпадающие числа: ";
+            //     for (int num : ids) {
+            //         std::cout << num << " ";
+            //     }
+            //     std::cout << std::endl;
+            // } else {
+            //     std::cout << "Совпадений не найдено." << std::endl;
+            // }
+
+            enterNewRepairStatus(gt_sys, ids);
+        }
+
 
     }
 
@@ -335,11 +362,29 @@ void editStation(GTSystem& gt_sys) {
             return;
         }
 
-        cout << "\nEdit:\n\n";
-        for (auto id: selc_id) {
-            gt_sys.editStation(id);
-            cout << "\n\n";
+        cout << "\n";
+        ST_HEADER
+            for(auto& id: selc_id) {
+            Station t = gt_sys.getStation(id);
+            cout << " " << t << '\n';
         }
+        cout << endl;
+
+        cout << "> Edit (All - 1, Certain - 2): ";
+        uint res2 = check_input(1, 2);
+
+        if (res2 == 1) {
+            enterNewEfficiency(gt_sys, selc_id);
+        } else {
+            vector<uint> ids = selectSertain(selc_id);
+            enterNewEfficiency(gt_sys, ids);
+        }
+
+        // cout << "\nEdit:\n\n";
+        // for (auto id: selc_id) {
+        //     gt_sys.editStation(id);
+        //     cout << "\n\n";
+        // }
 
     }
 

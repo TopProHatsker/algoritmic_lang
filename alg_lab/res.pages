@@ -30,7 +30,8 @@ enum menu_id {
 
     // GRAPH PAGE
     GP_PRINT,
-    GP_ADDEDGE
+    GP_ADDEDGE,
+    GP_REMOVE_EDGE
 };
 
 struct Button {
@@ -57,6 +58,10 @@ static const Book book = {
                 Button {
                     .data = "Exit",
                     .next = NONE
+                },
+                Button {
+                    .data = "Graph",
+                    .next = GRAPH
                 },
                 Button {
                     .data = "Print",
@@ -106,10 +111,7 @@ static const Book book = {
                 //     .data = "Delete Station",
                 //     .next = CS_DELETE
                 // },
-                Button {
-                    .data = "Graph",
-                    .next = GRAPH
-                }
+
             }
         },
         Page{
@@ -160,18 +162,22 @@ static const Book book = {
             .id = GRAPH,
             .title = " Graph ",
             .btn = {
-                 Button {
-                     .data = "Exit",
-                     .next = START
-                 },
-                 Button {
-                     .data = "Print",
-                     .next = GP_PRINT
-                 },
-                 Button {
-                     .data = "Add edge",
-                     .next = GP_ADDEDGE
-                 }
+                Button {
+                    .data = "Exit",
+                    .next = START
+                },
+                Button {
+                    .data = "Print",
+                    .next = GP_PRINT
+                },
+                Button {
+                    .data = "Connect",
+                    .next = GP_ADDEDGE
+                },
+                Button {
+                    .data = "DisConnect",
+                    .next = GP_REMOVE_EDGE
+                }
             }
         }
     }

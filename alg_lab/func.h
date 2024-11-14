@@ -2,12 +2,11 @@
 #define FUNC_H
 
 #include <iostream>
-#include <iomanip>
 #include "cstdio"
 #include "gt_system.h"
 
 using namespace std;
-
+// TODO:
 
 template <typename T>
 T check_input(T min, T max)
@@ -50,9 +49,12 @@ void filterFind(GTSystem& gt_sys);
     printf("----+---------------------+------+------+----------\n");
 
 #define PP_HEADER \
-    printf("  ID|                 Name|  Diam|Length|OnRepair\n"); \
-    printf("----+---------------------+------+------+---------\n");
+    printf("  ID|S_ID|D_ID|                 Name|  Diam|Length|OnRepair\n"); \
+    printf("----+----+----+---------------------+------+------+---------\n");
 
+
+bool CheckPPDiamAndFree(const Pipe& p, const void * diam);
+bool CheckPPConnected(const Pipe& p, const void * is_connected);
 
 
 #endif // FUNC_H

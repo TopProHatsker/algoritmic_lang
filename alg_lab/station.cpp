@@ -2,7 +2,7 @@
 #include "func.h"
 
 
-uint Station::ST_MaxID = 0;
+uint Station::ST_MaxID = 1;
 
 
 istream&  operator >> (istream& in, Station& station) {
@@ -17,7 +17,7 @@ istream&  operator >> (istream& in, Station& station) {
     station.workshops_work = check_input(0, (int)station.workshops_num);
 
     cout << "Efficiency: ";
-    station.eff = check_input(0., 999.9);
+    station.eff = check_input(0., 99.9);
 
     //in.ignore();
     return in;
@@ -35,8 +35,10 @@ istream&  operator >> (istream& in, Station& station) {
 // }
 
 ostream&  operator << (ostream& out, Station& station) {
-    printf("%3d| %20s| %5.d| %5.d| %8.f",
+    printf("%3.d| %20s| %5.d| %5d| %8.f",
            station.ID,
+           //station.src_ID,
+           //station.dest_ID,
            station.name.c_str(),
            station.workshops_num,
            station.workshops_work,
@@ -47,11 +49,14 @@ ostream&  operator << (ostream& out, Station& station) {
 
 
 ofstream& operator << (ofstream& ofs, Station& station) {
-    //ofs << station.ID << '\n';
-    ofs << station.name << '\n';
-    ofs << station.workshops_num << '\n';
+    ofs << station.name           << '\n';
+    ofs << station.workshops_num  << '\n';
     ofs << station.workshops_work << '\n';
-    ofs << station.eff << '\n';
+    ofs << station.eff            << '\n';
+
+    ofs << station.ID             << '\n';
+    //ofs << station.src_ID         << '\n';
+    //ofs << station.dest_ID        << '\n';
 
     return ofs;
 }
@@ -64,6 +69,10 @@ ifstream& operator >> (ifstream& ifs, Station& station) {
     ifs >> station.workshops_num;
     ifs >> station.workshops_work;
     ifs >> station.eff;
+
+    ifs >> station.ID;
+    //ifs >> station.src_ID;
+    //ifs >> station.dest_ID;
 
     return ifs;
 }
