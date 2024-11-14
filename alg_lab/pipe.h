@@ -89,7 +89,7 @@ public:
         this->dest_ID = 0;
     }
 
-    pair<uint, uint> getSTid() {
+    pair<uint, uint> getSTid() const {
         return {this->src_ID, this->dest_ID};
     }
 

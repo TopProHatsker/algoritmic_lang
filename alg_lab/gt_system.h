@@ -123,9 +123,54 @@ public:
     }
 
     void deleteStation(istream& is, ostream& os) {
-        deleteObj(is, os, this->stations);
-        // TODO: Check connection
+        os << "> Enter id: ";
+        uint station_id;
+        cin >> station_id;
+        is.ignore();
+
+        auto iter = this->stations.find(station_id);
+        if (iter == this->stations.end()) {
+            os << " Not found." << endl;
+            return;
+        } else {
+            os << "> Founded" << endl;
+        }
+
+        os << "> Station status: ";
+        vector<uint> pipe_id;
+        for (const auto& t: this->pipes)
+            if (
+                t.second.getSTid().first  == station_id ||
+                t.second.getSTid().second == station_id
+            ) pipe_id.push_back(t.first);
+
+        if (pipe_id.empty()) {
+            os << "Not connected" << endl;
+        } else {
+            os << "connected to (";
+            for (auto t: pipe_id) {
+                os << " " << this->pipes[t].getName() << ";";
+            }
+            os << ")" << endl;
+
+            os << "> Want to delete station anyway [N/y]: ";
+            string res;
+            getline(is, res);
+            if (res[0] == 'y') {
+
+            } else {
+                return;
+            }
+        }
+
+        for (auto id: pipe_id)
+            this->pipes[id].disconnect();
+
+        this->stations.erase(iter);
+        os << "> Deleted" << endl;
     }
+
+
     void deletePipe   (istream& is, ostream& os) {
         os << "> Enter id: ";
         uint id;
