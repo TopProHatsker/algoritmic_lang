@@ -8,7 +8,6 @@ uint Station::ST_MaxID = 1;
 istream&  operator >> (istream& in, Station& station) {
     cout << "Name: ";
     getline(cin, station.name);
-    //cin >> station.name;
 
     cout << "Total workshops num: ";
     station.workshops_num = check_input(0, 999);
@@ -24,21 +23,9 @@ istream&  operator >> (istream& in, Station& station) {
 }
 
 
-// ostream&  operator << (ostream& out, Station& station) {
-//     out << station.ID << '\t';
-//     out << station.name << '\t';
-//     out << station.workshops_num << '\t';
-//     out << station.workshops_work << '\t';
-//     out << station.eff << '\t';
-
-//     return out;
-// }
-
 ostream&  operator << (ostream& out, Station& station) {
     printf("%3.d| %20s| %5.d| %5d| %8.f",
            station.ID,
-           //station.src_ID,
-           //station.dest_ID,
            station.name.c_str(),
            station.workshops_num,
            station.workshops_work,
@@ -55,8 +42,6 @@ ofstream& operator << (ofstream& ofs, Station& station) {
     ofs << station.eff            << '\n';
 
     ofs << station.ID             << '\n';
-    //ofs << station.src_ID         << '\n';
-    //ofs << station.dest_ID        << '\n';
 
     return ofs;
 }
@@ -71,8 +56,34 @@ ifstream& operator >> (ifstream& ifs, Station& station) {
     ifs >> station.eff;
 
     ifs >> station.ID;
-    //ifs >> station.src_ID;
-    //ifs >> station.dest_ID;
 
     return ifs;
 }
+
+uint Station::getTotalWS() { return this->workshops_num; }
+
+bool Station::setWorkWS(uint num) {
+    if (num > this->workshops_num)
+        return 1;
+
+    this->workshops_work = num;
+    return 0;
+}
+
+void Station::setEfficiency(float eff) { this->eff = eff; }
+
+void Station::print() {
+    cout << "UID: " << ID << "\tName: " << name
+         << "\tTotal WS num: " << workshops_num
+         << "\tWork WS num: " << workshops_work << "\tEfficiency: " << eff
+         << endl;
+}
+
+uint Station::getId() const { return this->ID; }
+
+std::string Station::getName() const { return this->name; }
+
+float Station::getUnUsagePerc() const {
+    return (float)this->workshops_work / (float)this->workshops_num;
+}
+

@@ -1,5 +1,6 @@
 #include "gt_system.h"
 #include "func.h"
+#include <cmath>
 
 
 void GTSystem::print(ostream& out){
@@ -20,6 +21,7 @@ void GTSystem::printStations(ostream& out){
 
 }
 
+
 void GTSystem::printPipes(ostream& out){
 
     out << "\nPipes:\n";
@@ -31,8 +33,6 @@ void GTSystem::printPipes(ostream& out){
     }
 
 }
-
-
 
 
 int GTSystem::saveToFile(ofstream& ofs) {
@@ -278,12 +278,200 @@ void GTSystem::disconnectPipe(istream& is, ostream& os) {
         return;
     }
 
-    // os << "\nFounded:\n";
-    // PP_HEADER
-    // os << ' ' << this->pipes[pipe_id] << endl;
-
     this->pipes[pipe_id].disconnect();
 
-
     is.ignore();
+}
+
+void GTSystem::clear() {
+    this->stations.clear();
+    this->pipes.clear();
+}
+
+uint GTSystem::getPipesNum() const { return this->pipes.size(); }
+
+uint GTSystem::getStationsNum() const { return this->stations.size(); }
+
+void GTSystem::addPipe(istream &is) {
+    Pipe p;
+    is >> p;
+    is.ignore();
+    pipes.emplace(p.getId(), p);
+}
+
+void GTSystem::addStation(istream &is) {
+    Station s;
+    is >> s;
+    is.ignore();
+    stations.emplace(s.getId(), s);
+}
+
+unordered_map<uint, Pipe> GTSystem::getPipes() {
+    return this->pipes;
+}
+
+unordered_map<uint, Station> GTSystem::getStations() {
+    return this->stations;
+}
+
+Pipe GTSystem::getPipe(const uint key) const {
+    return this->pipes.find(key)->second;
+}
+
+const Station &GTSystem::getStation(const uint key) const {
+    return this->stations.find(key)->second;
+}
+
+int GTSystem::editPipeStatus(const uint id, const uint status) {
+    auto t = this->pipes.find(id);
+    if (t != this->pipes.end()) {
+        t->second.setRepairStatus(status);
+        return 0;
+    }
+    return 1;
+}
+
+int GTSystem::editStationEff(const uint id, const float eff) {
+    auto t = this->stations.find(id);
+    if (t != this->stations.end()) {
+        t->second.setEfficiency(eff);
+        return 0;
+    }
+    return 1;
+}
+
+
+void GTSystem::deleteStation(istream &is, ostream &os) {
+    os << "> Enter id: ";
+    uint station_id;
+    cin >> station_id;
+    is.ignore();
+
+    auto iter = this->stations.find(station_id);
+    if (iter == this->stations.end()) {
+        os << " Not found." << endl;
+        return;
+    } else {
+        os << "> Founded" << endl;
+    }
+
+    os << "> Station status: ";
+    vector<uint> pipe_id;
+    for (const auto &t : this->pipes)
+        if (t.second.getSTid().first == station_id ||
+            t.second.getSTid().second == station_id)
+            pipe_id.push_back(t.first);
+
+    if (pipe_id.empty()) {
+        os << "Not connected" << endl;
+    } else {
+        os << "connected to (";
+        for (auto t : pipe_id) {
+            os << " " << this->pipes[t].getName() << ";";
+        }
+        os << ")" << endl;
+
+        os << "> Want to delete station anyway [N/y]: ";
+        string res;
+        getline(is, res);
+        if (res[0] == 'y') {
+
+        } else {
+            return;
+        }
+    }
+
+    for (auto id : pipe_id)
+        this->pipes[id].disconnect();
+
+    this->stations.erase(iter);
+    os << "> Deleted" << endl;
+}
+
+
+void GTSystem::deletePipe(istream &is, ostream &os) {
+    os << "> Enter id: ";
+    uint id;
+    cin >> id;
+    is.ignore();
+
+    auto iter = pipes.find(id);
+    if (iter == this->pipes.end()) {
+        os << " Not found." << endl;
+        return;
+    } else {
+        os << "> Founded" << endl;
+    }
+
+    os << "> Pipe status: ";
+    if (iter->second.isConnected()) {
+        os << "Connected" << endl;
+
+        os << "> Want to delete pipe anyway [N/y]: ";
+        string res;
+        getline(is, res);
+        if (res[0] == 'y') {
+            // this->pipes.erase(iter);
+            // os << "> Deleted" << endl;
+        } else {
+            return;
+        }
+
+    } else {
+        os << "Not Connected" << endl;
+    }
+
+    this->pipes.erase(iter);
+    os << "> Deleted" << endl;
+}
+
+bool GTSystem::isStation(uint key) const {
+    return this->stations.find(key) != this->stations.end();
+}
+
+bool GTSystem::isPipe(uint key) const {
+    return this->pipes.find(key) != this->pipes.end();
+}
+
+
+std::vector<vector<uint>> GTSystem::getMaxtrix() {
+    vector<uint> row = {0};
+    row.resize(this->getStationsNum());
+    vector<vector<uint>> mtr;
+    for (uint i = 0; i < this->getStationsNum(); i++)
+        mtr.push_back(row);
+
+    for (auto &t : this->pipes) {
+        pair<uint, uint> ids = t.second.getSTid();
+        if (ids.first > 0 && ids.second > 0) {
+            if (
+              t.second.getLength() < mtr[ids.first - 1][ids.second - 1] ||
+              mtr[ids.first - 1][ids.second - 1] == 0
+            )
+                mtr[ids.first - 1][ids.second - 1] = t.second.getLength();
+        }
+    }
+
+    return mtr;
+}
+
+
+vector<vector<float>> GTSystem::getEffMaxtrix() {
+    vector<float> row = {0};
+    row.resize(this->getStationsNum());
+    vector<vector<float>> mtr;
+    for (uint i = 0; i < this->getStationsNum(); i++)
+        mtr.push_back(row);
+
+    for (auto &t : this->pipes) {
+        auto p = t.second;
+        pair<uint, uint> ids = p.getSTid();
+
+        if (ids.first > 0 && ids.second > 0) {
+            float eff = 10 * sqrt( pow(p.getDiam()/1000, 5) / p.getLength() );
+            mtr[ids.first - 1][ids.second - 1] += eff;
+        }
+    }
+
+    return mtr;
 }

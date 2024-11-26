@@ -129,7 +129,9 @@ int main() {
 
         case GP_MAX_FLOW:
             cout << "\n - - - | Max flow in system (Graph) | - - -\n" << endl;
-            //gt_sys.disconnectPipe(cin, cout);
+            graph.loadEffMatrix(gt_sys.getEffMaxtrix());
+            graph.printEffMatrix(cout);
+            graph.printMaxFlow(cout, cin);
             waitEnter();
             break;
         default:
@@ -138,6 +140,7 @@ int main() {
         }
 
     }
+
 
     cout << "Goodbye!" << endl;
 

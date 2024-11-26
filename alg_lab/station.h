@@ -12,9 +12,6 @@ class Station {
     static uint ST_MaxID;
 
     uint ID = 0;
-    //uint src_ID = 0;
-    //uint dest_ID = 0;
-
     string name = "";
     uint workshops_num = 0;
     uint workshops_work = 0;
@@ -39,48 +36,20 @@ public:
         this->eff = eff;
     }
 
-    uint getTotalWS() {
-        return this->workshops_num;
-    }
+    void print();
 
-    bool setWorkWS(uint num) {
-        if (num > this->workshops_num)
-            return 1;
-
-        this->workshops_work = num;
-        return 0;
-    }
-
-    void setEfficiency(float eff) {
-        this->eff = eff;
-    }
-
-    void print() {
-        cout << "UID: " << ID
-             << "\tName: " << name
-             << "\tTotal WS num: " << workshops_num
-             << "\tWork WS num: " << workshops_work
-             << "\tEfficiency: " << eff << endl;
-    }
+    uint getTotalWS();
+    bool setWorkWS(uint num);
+    void setEfficiency(float eff);
 
     friend istream&  operator >> (istream&   in, Station& station);
     friend ostream&  operator << (ostream&  out, Station& station);
     friend ofstream& operator << (ofstream& ofs, Station& station);
     friend ifstream& operator >> (ifstream& ifs, Station& station);
 
-
-    uint getId() {
-        return this->ID;
-    }
-
-    string getName() const {
-        return this->name;
-    }
-
-    float getUnUsagePerc() const {
-        return (float)this->workshops_work / (float)this->workshops_num;
-    }
-
+    uint getId() const ;
+    string getName() const;
+    float getUnUsagePerc() const;
 };
 
 #endif // STATION_H

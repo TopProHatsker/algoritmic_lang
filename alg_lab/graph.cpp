@@ -210,28 +210,47 @@ void Graph::printShortestPath(ostream& os, istream& is) {
     is.ignore();
 }
 
-// int t_main() {
-//     // Пример использования
-//     vector<vector<uint>> mtr = {
-//         {0, 1, 4, 0, 0},
-//         {1, 0, 2, 5, 0},
-//         {4, 2, 0, 0, 1},
-//         {0, 5, 0, 0, 3},
-//         {0, 0, 1, 3, 0}
-//     };
 
-//     uint start = 0; // Начальная вершина
-//     uint end = 4;   // Конечная вершина
+// - - - - - - - - - - - - MAX Flow - - - - - - - - - - - - -
 
-//     //vector<uint> shortestPath = dijkstra(mtr, start, end);
-
-//     cout << "Кратчайший путь от " << start << " до " << end << ": ";
-//     for (uint vertex : shortestPath) {
-//         cout << vertex << " ";
-//     }
-//     cout << endl;
-
-//     return 0;
-// }
+void Graph::loadEffMatrix(const std::vector<std::vector<float>>& mtr) {
+    this->effMtr = mtr;
+}
 
 
+void Graph::printEffMatrix(std::ostream &os) const {
+    os << "Матрица эффективности:\n\n";
+    if (this->effMtr.empty()) {
+        os << "> Empty" << std::endl;
+        return;
+    }
+
+    os << "   ";
+    for (uint i = 1; i <= this->effMtr.size(); i++) {
+        // os << i << "   ";
+        printf("%4d|", i);
+    }
+    os << "\n  г";
+
+    for (uint i = 0; i < this->effMtr.size(); i++) {
+        printf("----+");
+    }
+    os << std::endl;
+
+    for (uint i = 0; i < this->effMtr.size(); i++) {
+        os << " " << i + 1 << "|";
+        for (uint j = 0; j < this->effMtr.size(); j++) {
+            if (effMtr[i][j]) {
+                printf("%2.2f|", effMtr[i][j]);
+            } else
+                printf("  - |");
+        }
+        os << std::endl;
+    }
+}
+
+
+// TODO: add logic
+void Graph::printMaxFlow(std::ostream& os, std::istream& is) {
+    os << "\n<max flow func>" << endl;
+}

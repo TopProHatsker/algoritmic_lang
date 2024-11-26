@@ -24,37 +24,6 @@ istream&  operator >> (istream& in, Pipe& pipe) {
 }
 
 
-// ostream&  operator << (ostream& out, Pipe& pipe) {
-
-//     // std::locale::global(std::locale("ru_RU.UTF-8"));
-//     // std::wcout.imbue(std::locale(""));
-//     out.fill(' ');
-//     out.width(3);
-//     out << pipe.ID << "| ";
-
-//     out.fill(' ');
-//     out.width(3);
-//     out << pipe.src_ID << "| ";
-
-//     out.fill(' ');
-//     out.width(3);
-//     out << pipe.dest_ID << "| ";
-
-//     out.width(20);
-//     out << pipe.name << "| ";
-
-//     out.width(5);
-//     out << pipe.diameter << "| ";
-
-//     out.width(5);
-//     out << pipe.length << "| ";
-
-//     out.width(7);
-//     out << pipe.on_repair;
-
-//     return out;
-// }
-
 ostream&  operator << (ostream& out, Pipe& pipe) {
     printf("%3.d| %3.d| %3.d| %20s| %5.d| %5.lf| %7.d",
            pipe.ID,
@@ -98,3 +67,43 @@ ifstream& operator >> (ifstream& ifs, Pipe& pipe) {
 
     return ifs;
 }
+
+
+void Pipe::connect(uint src_id, uint dest_id) {
+    this->src_ID = src_id;
+    this->dest_ID = dest_id;
+}
+
+void Pipe::disconnect() {
+    this->src_ID = 0;
+    this->dest_ID = 0;
+}
+
+std::pair<uint, uint> Pipe::getSTid() const {
+    return {this->src_ID, this->dest_ID};
+}
+
+bool Pipe::isConnected() const {
+    return (bool)this->src_ID + (bool)this->dest_ID;
+}
+
+uint Pipe::getLength() const { return this->length; }
+
+uint Pipe::getDiam() const { return this->diameter; }
+
+std::string Pipe::getName() const { return this->name; }
+
+uint Pipe::getId() const { return this->ID; }
+
+void Pipe::print() const {
+    cout
+        << "ID: " << ID
+        << "\tName: " << name
+        << "\tDiameter: " << diameter
+        << "\tLength: " << length
+        << "\tOn repair: " << on_repair
+        << endl;
+}
+
+void Pipe::setRepairStatus(bool on_repair) { this->on_repair = on_repair; }
+bool Pipe::isRepair() const { return on_repair; }
