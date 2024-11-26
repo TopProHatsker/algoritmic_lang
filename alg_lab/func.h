@@ -5,8 +5,6 @@
 #include "cstdio"
 #include "gt_system.h"
 
-using namespace std;
-// TODO:
 
 template <typename T>
 T check_input(T min, T max)

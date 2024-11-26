@@ -29,6 +29,14 @@ public:
     void printMatrix(std::ostream& os) const;
     void printTopolog(std::ostream& os);
 
+    std::vector<uint> dijkstra(
+        const std::vector<std::vector<uint>>& mtr,
+        uint start,
+        uint end
+    );
+
+    void printShortestPath(std::ostream& os, std::istream& is);
+
 };
 
 

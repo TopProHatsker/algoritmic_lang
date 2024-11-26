@@ -231,8 +231,8 @@ public:
         for (auto& t: this->pipes) {
             pair<uint, uint> ids = t.second.getSTid();
             if (ids.first > 0 && ids.second > 0) {
-                mtr[ids.first - 1][ids.second - 1] = t.second.getLength();
-                //mtr[ids.second][ids.first] = t.second.getLength(); // TODO:
+                if (mtr[ids.first - 1][ids.second - 1] > t.second.getLength() || mtr[ids.first - 1][ids.second - 1] == 0)
+                    mtr[ids.first - 1][ids.second - 1] = t.second.getLength();
             }
         }
 

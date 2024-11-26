@@ -31,7 +31,9 @@ enum menu_id {
     // GRAPH PAGE
     GP_PRINT,
     GP_ADDEDGE,
-    GP_REMOVE_EDGE
+    GP_REMOVE_EDGE,
+    GP_SHORTEST_PATH,
+    GP_MAX_FLOW
 };
 
 struct Button {
@@ -53,7 +55,7 @@ static const Book book = {
     .pages = {
         Page{
             .id = START,
-            .title = " Karchenko L1 ",
+            .title = " Karchenko Alg ",
             .btn = {
                 Button {
                     .data = "Exit",
@@ -177,6 +179,14 @@ static const Book book = {
                 Button {
                     .data = "DisConnect",
                     .next = GP_REMOVE_EDGE
+                },
+                Button {
+                    .data = "Shortest path",
+                    .next = GP_SHORTEST_PATH
+                },
+                Button {
+                    .data = "Max Flow",
+                    .next = GP_MAX_FLOW
                 }
             }
         }

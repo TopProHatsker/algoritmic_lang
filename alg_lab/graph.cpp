@@ -1,6 +1,9 @@
 #include "graph.h"
+#include "func.h"
 
-
+//#include <queue>
+#include <limits>
+#include <algorithm>
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -71,7 +74,7 @@ void Graph::printTopolog(std::ostream& os) {
         os
             << "  "
             << (i % 2 ? "/" : "\\")
-            << "^"
+            << "v"
             << (i % 2 ? "/" : "\\")
             << "  "
             << sorted_id.top() + 1
@@ -113,3 +116,122 @@ void Graph::printMatrix(std::ostream& os) const {
     }
 
 }
+
+
+// - - - - - - - - - - - - Dijkstra - - - - - - - - - - - - -
+
+#define MAX_UINT numeric_limits<uint>::max()
+
+vector<uint> Graph::dijkstra(const vector<vector<uint>>& mtr, uint start, uint end) {
+    size_t n = mtr.size();
+    vector<uint> dist(n, MAX_UINT); // Вектор расстояний
+    vector<uint> prev(n, MAX_UINT); // Вектор предков
+    vector<bool> visited(n, false); // Вектор посещённых вершин
+
+    dist[start] = 0; // Расстояние до начальной вершины равно 0
+
+    for (size_t i = 0; i < n; ++i) {
+        // Находим вершину с минимальным расстоянием
+        uint minDist = MAX_UINT;
+        int currentVertex = -1;
+
+        for (size_t j = 0; j < n; ++j) {
+            if (!visited[j] && dist[j] < minDist) {
+                minDist = dist[j];
+                currentVertex = j;
+            }
+        }
+
+        if (currentVertex == -1) {
+            break; // Все доступные вершины посещены
+        }
+
+        visited[currentVertex] = true;
+
+        // Обновляем расстояния до соседей
+        for (size_t neighbor = 0; neighbor < n; neighbor++) {
+            if (mtr[currentVertex][neighbor] > 0 && !visited[neighbor]) {    // Если есть ребро и сосед не посещён
+                uint newDist = dist[currentVertex] + mtr[currentVertex][neighbor];
+                if (newDist < dist[neighbor]) {                 // Если найдено более короткое расстояние
+                    dist[neighbor] = newDist;
+                    prev[neighbor] = currentVertex;
+                }
+            }
+        }
+    }
+
+    // Восстановление пути
+    vector<uint> path;
+    for (uint at = end; at != MAX_UINT; at = prev[at]) {
+        path.push_back(at);
+    }
+    reverse(path.begin(), path.end());
+
+    // Если путь не найден, возвращаем пустой вектор
+    if (path.size() == 1 && path[0] != start) {
+        return {};
+    }
+
+    return path;
+}
+
+
+void Graph::printShortestPath(ostream& os, istream& is) {
+    os << "> Enter src station id: ";
+    uint src_id = check_input(1UL, this->adjMtr.size()) - 1;
+
+    os << "> Enter dest station id: ";
+    uint dest_id = check_input(1UL, this->adjMtr.size()) - 1;
+
+    vector<uint> shortestPath = dijkstra(this->adjMtr, src_id, dest_id);
+
+
+    if (shortestPath.empty()) {
+        os << "\n> Путь не найден"<< endl;
+    } else {
+        os  << "\n> Кратчайший путь от "
+           << src_id + 1
+           << " до "
+           << dest_id + 1
+           << ": ";
+
+        uint curr = shortestPath[0], prev = 0, sum = 0;
+        for (uint vertex : shortestPath) {
+            prev = curr;
+            curr = vertex;
+            os << vertex + 1 << " ";
+            sum += this->adjMtr[prev][curr];
+        }
+        os << endl;
+
+        os << "  Длина: " << sum << endl;
+    }
+
+    is.ignore();
+}
+
+// int t_main() {
+//     // Пример использования
+//     vector<vector<uint>> mtr = {
+//         {0, 1, 4, 0, 0},
+//         {1, 0, 2, 5, 0},
+//         {4, 2, 0, 0, 1},
+//         {0, 5, 0, 0, 3},
+//         {0, 0, 1, 3, 0}
+//     };
+
+//     uint start = 0; // Начальная вершина
+//     uint end = 4;   // Конечная вершина
+
+//     //vector<uint> shortestPath = dijkstra(mtr, start, end);
+
+//     cout << "Кратчайший путь от " << start << " до " << end << ": ";
+//     for (uint vertex : shortestPath) {
+//         cout << vertex << " ";
+//     }
+//     cout << endl;
+
+//     return 0;
+// }
+
+

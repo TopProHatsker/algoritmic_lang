@@ -9,29 +9,20 @@ using namespace std;
 /*
  * _TODO:
  * [ ] реализовать расчет максимального потока в сети;
- * [ ] реализовать расчет кратчайшего пути между заданными КС.
+ * [X] реализовать расчет кратчайшего пути между заданными КС.
  *
- * [X] Удаление станций
- * [ ] Сохранять в матрицу кратчайший путь при 2 подключниях
+ * [X] Сохранять в матрицу кратчайший путь при 2 подключниях
  * [ ] Перенести пакетное радактирование в GTSystem
- * [X] выбор станций в пакетном редактировании из найденных
  */
 
 
 int main() {
 
-    // FIXME
-    // - - - - - - - - - - - - - - - - - -
-
-    // // строим graph из заданных ребер
-    Graph graph;
-
-    // - - - - - - - - - - - - - - - - - -
-
     NewMenu menu;
     menu.auto_size();
 
     GTSystem gt_sys;
+    Graph graph;
 
     // - - - - - - - - - - - -
     ifstream ifs;
@@ -129,6 +120,18 @@ int main() {
             waitEnter();
             break;
 
+        case GP_SHORTEST_PATH:
+            cout << "\n - - - - - | Shortest path in Graph | - - - - -\n" << endl;
+            graph.loadMatrix(gt_sys.getMaxtrix());
+            graph.printShortestPath(cout, cin);
+            waitEnter();
+            break;
+
+        case GP_MAX_FLOW:
+            cout << "\n - - - | Max flow in system (Graph) | - - -\n" << endl;
+            //gt_sys.disconnectPipe(cin, cout);
+            waitEnter();
+            break;
         default:
             //waitEnter();
             break;
