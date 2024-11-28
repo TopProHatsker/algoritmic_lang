@@ -176,7 +176,7 @@ void GTSystem::connectPipe(istream& is, ostream& os) {
     }
 
     if (src_id == dest_id) {
-        os << "!> Error (Source id equals Destination)" << endl;
+        os << "!> Error (Source id equals Destination id)" << endl;
         is.ignore();
         return;
     }
@@ -468,7 +468,13 @@ vector<vector<float>> GTSystem::getEffMaxtrix() {
         pair<uint, uint> ids = p.getSTid();
 
         if (ids.first > 0 && ids.second > 0) {
-            float eff = 10 * sqrt( pow(p.getDiam()/1000, 5) / p.getLength() );
+            float eff = 0;
+
+            if (p.isRepair())
+                eff = 0;
+            else
+                eff = 10 * sqrt( (float)pow((float)p.getDiam()/1000., 5) / (float)p.getLength() );
+
             mtr[ids.first - 1][ids.second - 1] += eff;
         }
     }

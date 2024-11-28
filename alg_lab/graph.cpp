@@ -2,6 +2,8 @@
 #include "func.h"
 
 //#include <queue>
+#include <cmath>
+#include <iomanip>
 #include <limits>
 #include <algorithm>
 #include <iostream>
@@ -121,6 +123,7 @@ void Graph::printMatrix(std::ostream& os) const {
 // - - - - - - - - - - - - Dijkstra - - - - - - - - - - - - -
 
 #define MAX_UINT numeric_limits<uint>::max()
+#define MAX_FLOAT numeric_limits<float>::max()
 
 vector<uint> Graph::dijkstra(const vector<vector<uint>>& mtr, uint start, uint end) {
     size_t n = mtr.size();
@@ -240,17 +243,117 @@ void Graph::printEffMatrix(std::ostream &os) const {
     for (uint i = 0; i < this->effMtr.size(); i++) {
         os << " " << i + 1 << "|";
         for (uint j = 0; j < this->effMtr.size(); j++) {
-            if (effMtr[i][j]) {
-                printf("%2.2f|", effMtr[i][j]);
-            } else
-                printf("  - |");
+            if (i == j) {
+                printf("  X |");
+            } else {
+                if (effMtr[i][j]) {
+                    printf("%2.2f|", effMtr[i][j]);
+                } else {
+                    printf("  - |");
+                }
+            }
         }
         os << std::endl;
     }
 }
 
 
-// TODO: add logic
-void Graph::printMaxFlow(std::ostream& os, std::istream& is) {
-    os << "\n<max flow func>" << endl;
+
+// Функция для поиска увеличивающего пути с помощью DFS
+bool dfs(int u, float flow, int t, vector<float>& parent, const vector<vector<float>>& capacity) {
+    if (u == t) return true; // Достигли конечной вершины
+    for (int v = 0; v < capacity.size(); ++v) {
+        // Если есть доступное ребро и еще остался поток
+        if (capacity[u][v] > 0 && parent[v] == -1) {
+            parent[v] = u; // Запоминаем родителя
+            float new_flow = fmin(flow, capacity[u][v]);
+            if (dfs(v, new_flow, t, parent, capacity)) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
+
+// Функция для нахождения максимального потока
+float fordFulkerson(int s, int t, const vector<vector<float>>& capacity_matrix) {
+    float max_flow = 0;
+    vector<vector<float>> residual(capacity_matrix); // Остаточная сеть
+
+    while (true) {
+        vector<float> parent(capacity_matrix.size(), -1); // Массив для хранения пути
+        parent[s] = -2; // Начальная вершина
+
+        // Ищем увеличивающий путь
+        if (!dfs(s, MAX_FLOAT, t, parent, residual)) break;
+
+        // Находим минимальный поток по найденному пути
+        float flow = MAX_FLOAT;
+        for (int v = t; v != s; v = parent[v]) {
+            int u = parent[v];
+            flow = fmin(flow, residual[u][v]);
+        }
+
+        // Обновляем остаточную сеть
+        for (int v = t; v != s; v = parent[v]) {
+            int u = parent[v];
+            residual[u][v] -= flow; // Уменьшаем поток по прямому ребру
+            residual[v][u] += flow; // Увеличиваем поток по обратному ребру
+        }
+
+        max_flow += flow; // Увеличиваем общий поток
+    }
+
+    return max_flow;
+}
+
+// int t_main() {
+//     // Пример использования
+//     //int n = 6; // Количество вершин
+//     vector<vector<float>> _effMtr = {
+//         {0, 16, 13, 0, 0, 0},
+//         {0, 0, 10, 12, 0, 0},
+//         {0, 4, 0, 0, 14, 0},
+//         {0, 0, 9, 0, 0, 20},
+//         {0, 0, 0, 7, 0, 4},
+//         {0, 0, 0, 0, 0, 0}
+//     };
+
+//     int src_id = 0; // Начальная вершина
+//     int dest_id = 5;   // Конечная вершина
+
+//     float max_flow = fordFulkerson(src_id, dest_id, _effMtr);
+//     cout << "Максимальный поток: " << max_flow << endl;
+
+//     return 0;
+// }
+
+
+
+
+void Graph::printMaxFlow(std::ostream& os, std::istream& is) {
+    os << "\n> Enter src station id: ";
+    uint src_id  = check_input(1UL, this->effMtr.size()) - 1;
+
+    os << "> Enter dest station id: ";
+    uint dest_id = check_input(1UL, this->effMtr.size()) - 1;
+
+    if (src_id == dest_id) {
+        os << "!> Error (Source id equals Destination id)" << endl;
+        is.ignore();
+        return;
+    }
+
+    float max_flow = fordFulkerson(src_id, dest_id, this->effMtr);
+    os
+        << "\nМаксимальный поток из "
+        << src_id + 1
+        << " в "
+        << dest_id + 1
+        << ": "
+        << setprecision(4) << max_flow
+        << endl;
+
+    is.ignore();
+}
+
