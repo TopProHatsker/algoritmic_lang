@@ -4,5 +4,5 @@ Algorithmic languages homework
 Progress:
 1) v
 2) v
-3) *
-4) *
+3) v
+4) v

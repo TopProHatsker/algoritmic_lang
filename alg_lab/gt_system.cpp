@@ -448,7 +448,8 @@ std::vector<vector<uint>> GTSystem::getMaxtrix() {
               t.second.getLength() < mtr[ids.first - 1][ids.second - 1] ||
               mtr[ids.first - 1][ids.second - 1] == 0
             )
-                mtr[ids.first - 1][ids.second - 1] = t.second.getLength();
+                if (!t.second.isRepair())
+                    mtr[ids.first - 1][ids.second - 1] = t.second.getLength();
         }
     }
 
